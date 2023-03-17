@@ -1,11 +1,25 @@
+###############################################################################
+                                  # PROJECT #
+###############################################################################
+
+[project]
+requires_python = ">3.10"
+
+###############################################################################
+                                  # POETRY #
+###############################################################################
+
 [tool.poetry]
 name = "fouine"
 version = "0.1.0"
 description = ""
 authors = ["you"]
 license = "MIT"
-readme = "README.md"
+readme = "Readme.md"
 
+##########################
+######## DEPENDENCIES
+##########################
 ###
 
 [tool.poetry.dependencies]
@@ -15,19 +29,69 @@ python = "^3.10"
 
 [tool.poetry.group.dev]
 optional = true
+
 [tool.poetry.group.dev.dependencies]
 
-###
 black = "^23.1.0"
-flake8 = "^6.0.0"
+pre-commit = "^3.1.1"
+isort = "^5.12.0"
+flake9 = "^3.8.3.post2"
+
+###
 
 [tool.poetry.group.docs]
 optional = true
-[tool.poetry.group.docs.dependencies]
 
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.4.2"
+mkdocstrings = "^0.20.0"
+
+##########################
+######## SCRIPTS
+##########################
 ###
-sphinx = "^6.1.3"
+
+[tool.poetry.scripts]
+fouine = 'fouine.fouine:main'
+
+###############################################################################
+                                  # BLACK #
+###############################################################################
+
+[tool.black]
+line-length = 88
+target-version = ['py310']
+include = '\.pyi?$'
+exclude = '''
+(
+	/(
+		get_poetry.sh
+		poetry.lock
+		poetry.toml
+		pyproject.toml
+		.flake8
+		.isort.cfg
+		\.git
+		| .venv
+		| build
+		| doc
+	)/
+)
+'''
+
+###############################################################################
+                                  # ISORT #
+###############################################################################
+
+[tool.isort]
+profile = 'black'
+py_version = ['py310']
+
+###############################################################################
+                                  # BUILD #
+###############################################################################
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
