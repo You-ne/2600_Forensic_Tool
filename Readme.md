@@ -10,14 +10,14 @@ This is '__fouine__', a _forensic tool_.
 
 Besides the installation of _poetry_ and _fouine_, there is 3 commands that will be useful for interacting with _poetry_:
 
-    - `poetry shell` will launch a shell with the poetry virtual environment activated. `poetry install` may launch it.
+- `poetry shell` will launch a shell with the poetry virtual environment activated. `poetry install` may launch it.
 
-    - `exit` to quit the poetry shell.
+- `exit` to quit the __poetry shell__.
 
-    - `poetry run cmd` to run a command inside poetry shell without entering it.
+- `poetry run cmd` to run a command inside poetry shell without entering it.
 
 
-For anything else check https://python-poetry.org/docs ;)
+For anything else check __https://python-poetry.org/docs__ ;)
 
 
 ---

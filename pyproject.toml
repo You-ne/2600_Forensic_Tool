@@ -29,22 +29,26 @@ python = "^3.10"
 
 [tool.poetry.group.dev]
 optional = true
-
 [tool.poetry.group.dev.dependencies]
-
-black = "^23.1.0"
 pre-commit = "^3.1.1"
 isort = "^5.12.0"
-flake9 = "^3.8.3.post2"
+
+###
+
+[tool.poetry.group.bigdev]
+optional = true
+[tool.poetry.group.bigdev.dependencies]
+black = "^23.1.0"
+flake8 = "^6.0.0"
 
 ###
 
 [tool.poetry.group.docs]
 optional = true
-
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.4.2"
 mkdocstrings = "^0.20.0"
+
 
 ##########################
 ######## SCRIPTS
@@ -59,33 +63,21 @@ fouine = 'fouine.fouine:main'
 ###############################################################################
 
 [tool.black]
-line-length = 88
 target-version = ['py310']
-include = '\.pyi?$'
-exclude = '''
-(
-	/(
-		get_poetry.sh
-		poetry.lock
-		poetry.toml
-		pyproject.toml
-		.flake8
-		.isort.cfg
-		\.git
-		| .venv
-		| build
-		| doc
-	)/
-)
-'''
+line-length = 88
+include = 'fouine/'
 
 ###############################################################################
                                   # ISORT #
 ###############################################################################
 
 [tool.isort]
+verbose = 'True'
 profile = 'black'
-py_version = ['py310']
+py_version = '310'
+group_by_package = 'True'
+skip_gitignore = 'True'
+known_third_party = []
 
 ###############################################################################
                                   # BUILD #
