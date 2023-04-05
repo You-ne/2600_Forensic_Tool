@@ -80,11 +80,12 @@ Install __fouine__ with the following to have everything needed for contribution
 
 ### Committing
 
-/WILL SOON BE ACTIVATED\\
+__Before__ committing for the first time (on your actual clone), use :
+        `pre-commit install`
 
+This will work only if you installed with `poetry install --with dev`
 
 When committing to the repo, the hooks configured by __pre-commit__ will be used on the codebase to check it's conformity.
-
 If these tools checks are failing, you won't be able to commit...
 
-So correct your style !
+So correct your style ! (and don't forget to re-add your files ^^)
