@@ -38,6 +38,8 @@ pytest = "^7.2.2"
 
 ###
 flakeheaven = "^3.2.1"
+flake8-commas = "^2.1.0"
+flake8-quotes = "^3.3.2"
 
 [tool.poetry.group.docs]
 optional = true
@@ -71,13 +73,18 @@ include = 'src/'
 base = ["https://raw.githubusercontent.com/flakeheaven/flakeheaven/main/pyproject.toml"]
 format= "colored"
 show_source = true
-count = true
-statistics = true
+exlude = ["*.py[cod]"]
 max-line-length = 88
 max-complexity = 18
-select = "B,C,E,F,W,T4,B9"
-extend-ignore = "E203"
-extend-exclude = "*.py[cod]"
+
+[tool.flakeheaven.plugins]
+pycodestyle = ["+*"]
+pyflakes = ["+*"]
+mccabe = ["+*"]
+flake8-commas = ["+*"]
+flake8-quotes = ["+*"]
+#select = "B,C,E,F,W,T4,B9"
+#extend-ignore = "E203"
 
 ###############################################################################
                                   # ISORT #
