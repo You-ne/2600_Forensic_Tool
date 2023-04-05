@@ -18,7 +18,7 @@ repos:
     hooks:
       - id: flakeheaven
         name: flakeheaven
-        entry: flakeheaven lint
+        entry: flakeheaven
         language: system
         files: ^src/
         types: [file, python]
