@@ -26,6 +26,10 @@ readme = "Readme.md"
 python = "^3.10"
 
 ###
+libewf-python = "^20230212"
+argparse = "^1.4.0"
+pytsk3 = "^20230125"
+regrippy = "^2.0.0"
 
 [tool.poetry.group.dev]
 optional = true
