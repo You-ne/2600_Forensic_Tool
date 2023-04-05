@@ -1,9 +1,11 @@
 repos:
-  - repo: https://github.com/psf/black
-    rev: 23.1.0
+  - repo: local
     hooks:
       - id: black
-        files: ^fouine/
+        name: black
+        entry: black
+        language: system
+        files: ^src/
         types: [file, python]
         args: ["--config", "pyproject.toml"]
 
@@ -12,15 +14,38 @@ repos:
     hooks:
     -   id: seed-isort-config
 
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+  - repo: local
     hooks:
-      - id: flake8
-        args: [
-          "--color=amways",
-          "--count",
-          "--statistics",
-          "--max-line-length=88",
-          "--extend-ignore=E203,E266,F401,F403,F405,E501,F524,F601,W605,E722,F722,F811,F821,F841",
-          "extend-exclude=*.py[cod]"
-          ]
+      - id: flakeheaven
+        name: flakeheaven
+        entry: flakeheaven lint
+        language: system
+        files: ^src/
+        types: [file, python]
+    #    args: [
+    #      "--color=always",
+    #      "-vvv",
+     #     "--count",
+      #    "--statistics",
+       #   "--max-line-length=88",
+        #  "--extend-ignore=E203,E266,F401,F403,F405,E501,F524,F601,W605,E722,F722,F811,F821,F841",
+         # "--extend-exclude=*.py[cod]"
+         # ]
+
+  - repo: local
+    hooks:
+      - id: isort
+        name: isort
+        entry: isort
+        language: system
+        files: ^src/
+        types: [file, python]
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: system
+        files: ^src/
+        types: [file, python]

@@ -14,5 +14,5 @@ def main():
         print("Here should close the APP")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

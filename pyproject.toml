@@ -32,16 +32,12 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.1.1"
 isort = "^5.12.0"
-
-###
-
-[tool.poetry.group.bigdev]
-optional = true
-[tool.poetry.group.bigdev.dependencies]
 black = "^23.1.0"
-flake8 = "^6.0.0"
+mypy = "^1.1.1"
+pytest = "^7.2.2"
 
 ###
+flakeheaven = "^3.2.1"
 
 [tool.poetry.group.docs]
 optional = true
@@ -64,8 +60,23 @@ fouine = 'fouine.fouine:main'
 
 [tool.black]
 target-version = ['py310']
+verbose = 'False'
 line-length = 88
-include = 'fouine/'
+include = 'src/'
+
+###############################################################################
+                                  # FLAKEHEAVEN #
+###############################################################################
+[tool.flakeheaven]
+verbose = 'True'
+show_source = true
+count = true
+statistics = true
+max-line-length = 88
+max-complexity = 18
+select = "B,C,E,F,W,T4,B9"
+extend-ignore = "E203"
+extend-exclude = "*.py[cod]"
 
 ###############################################################################
                                   # ISORT #
@@ -75,9 +86,52 @@ include = 'fouine/'
 verbose = 'True'
 profile = 'black'
 py_version = '310'
+known_third_party = []
 group_by_package = 'True'
 skip_gitignore = 'True'
-known_third_party = []
+combine_as_imports = 'True'
+
+###############################################################################
+                                  # MYPY #
+###############################################################################
+
+[tool.mypy]
+python_version = "3.10"
+
+#3rd party import
+ignore_missing_imports =		true
+
+# Dynamic Typing
+disallow_any_unimported =		true
+disallow_any_expr =				false
+disallow_any_decorated =		false
+disallow_any_explicit =			true
+disallow_any_generics =			false
+disallow_subclassing_any =		true
+
+# Untyped
+dissalow_untyped_defs =			true
+dissalow_untyped_decorators =	true
+dissalow_untyped_calls =		true
+dissalow_incomplete_defs =		true
+
+# None and Optional
+no_implicit_optional =			true
+
+# Warnings
+warn_return_any =				false
+warn_unreachable=				true
+
+# Misc
+pretty =						true
+
+###############################################################################
+                                  # MYPY #
+###############################################################################
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider" # deactivating pytest caching.
+
 
 ###############################################################################
                                   # BUILD #
