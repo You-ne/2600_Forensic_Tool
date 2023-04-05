@@ -82,7 +82,7 @@ pycodestyle = ["+*"]
 pyflakes = ["+*"]
 mccabe = ["+*"]
 flake8-commas = ["+*"]
-flake8-quotes = ["+*"]
+flake8-quotes = ["+*", "-Q000"]
 #select = "B,C,E,F,W,T4,B9"
 #extend-ignore = "E203"
 
