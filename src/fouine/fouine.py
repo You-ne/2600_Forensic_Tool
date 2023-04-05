@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import logging
+import sys
 from datetime import datetime
 
 
 def main():
+    print("coucou")
     try:
         logname = datetime.now().strftime("/tmp/log%Y_%m_%d_%H:%M:%S.log")
         logging.basicConfig(filename=logname, level=logging.INFO)

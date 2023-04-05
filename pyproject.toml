@@ -68,7 +68,8 @@ include = 'src/'
                                   # FLAKEHEAVEN #
 ###############################################################################
 [tool.flakeheaven]
-verbose = 'True'
+base = ["https://raw.githubusercontent.com/flakeheaven/flakeheaven/main/pyproject.toml"]
+format= "colored"
 show_source = true
 count = true
 statistics = true
