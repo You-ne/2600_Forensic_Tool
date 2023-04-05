@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 def main():
-    print("coucou")
+    print("Lancement de la Fouine...")
     try:
         logname = datetime.now().strftime("/tmp/log%Y_%m_%d_%H:%M:%S.log")
         logging.basicConfig(filename=logname, level=logging.INFO)
