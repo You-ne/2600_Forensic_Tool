@@ -1,6 +1,6 @@
 import pyewf
 import pytsk3
-
+from colorama import Fore, Style
 
 class EwfImg(pytsk3.Img_Info):
   """
@@ -10,7 +10,6 @@ class EwfImg(pytsk3.Img_Info):
     return pytsk3.Volume_Info(self)
   
   def __init__(self, ewf_handle):
-    self._tsk_fs = ['TFS', 'NTFS', 'FAT', 'FAT12', 'FAT16', 'FAT32', 'EXT2', 'EXT3', 'EXT4', 'HFS+', 'ISO', 'UFS', 'APFS', 'data']
     self._ewf_handle = ewf_handle
     super(EwfImg, self).__init__(
         url="", type=pytsk3.TSK_IMG_TYPE_EXTERNAL)
@@ -26,22 +25,51 @@ class EwfImg(pytsk3.Img_Info):
   def get_size(self):
     return self._ewf_handle.get_media_size()
 
-  def list_fs(self):
-    return [volume for volume in self.partTable for fs in self._tsk_fs if fs in str(volume.desc)]
-      
-
 
 class Fouine():
   """
     Take a file name in argument and return an object to work with EWF disk from a forensic point of view
   """
+  class PartitionTable(list):
+    def _list_vol_fs(self) -> list:
+      return [volume for volume in self for fs in self._tsk_fs if fs in volume.desc]
+
+    def __init__(self, partitions:list) -> None:
+      super().__init__(partitions)
+      self._tsk_fs = [
+      b'TFS', b'NTFS', b'FAT', b'FAT12', b'FAT16', b'FAT32', b'EXT2', b'EXT3',
+      b'EXT4', b'HFS+', b'ISO', b'UFS', b'APFS', b'data']
+      try:
+        self.fs_vols = self._list_vol_fs()
+      except Exception as e:
+        print(f"{e} \n {Fore.YELLOW} NOTE: Runtime Error can occur if your EWF image is incomplete{Style.RESET_ALL}")
+      
+ 
+    def __repr__(self):
+      ret = ""
+      for part in self:
+        ret += f"{Fore.RED}{part.addr}  |  {Fore.BLUE}{part.start} - {part.start*512}\t\t{Fore.GREEN}{part.desc}{Style.RESET_ALL}\n"
+      return ret
+    
+    @classmethod
+    def from_volume_info(cls, volume):
+      return cls([p for p in volume])
+
+  def _get_fs(self, part_idx=None) -> list:
+    if part_idx:
+      return [pytsk3.FS_Info(self.img, offset=p.start*512)
+               for p in self.partition_table if int(p.addr) == part_idx]
+    return [pytsk3.FS_Info(self.img, offset=p.start*512)
+              for p in self.partition_table.fs_vols]
+
   def __init__(self, filename:str=None,) -> None:
     self.raw = filename
     self.filenames = pyewf.glob(self.raw) if self.raw else None
     self.handle = pyewf.handle()
     self.handle.open(self.filenames)
     self.img = EwfImg(self.handle)
-    self.partition_table = self.img.partTable
+    self.partition_table = self.PartitionTable.from_volume_info(self.img.partTable)
+    self.filesystems = self._get_fs()
 
 
 
