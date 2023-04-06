@@ -1,6 +1,7 @@
 import pyewf
 import pytsk3
 from colorama import Fore, Style
+from .tsk3_helper import *
 
 class EwfImg(pytsk3.Img_Info):
   """
@@ -26,13 +27,31 @@ class EwfImg(pytsk3.Img_Info):
     return self._ewf_handle.get_media_size()
 
 
+class FilesystemHelper(pytsk3.FS_Info):
+  def __init__(self, img, partition):
+    super(FilesystemHelper, self).__init__(img, offset=(partition.start*512))
+    self.fs_type = FS_TYPE_ENUM(self.info.ftype)
+  def fstype():
+    return self.fs_type.name
+
+  def ls_dir(path:str='/'):
+    directory = self.open_dir(path)
+    return [file_handle.info.name.name for file_handle in directory]
+
 class Fouine():
   """
     Take a file name in argument and return an object to work with EWF disk from a forensic point of view
+    self.handle is a pyewf.handle class
+    self.img is the ewf image binding derived from EwfImg class
+    self.partition_table is a custom list of partitions
+    self.filesystems is a list of filesystems
   """
   class PartitionTable(list):
+    """
+      Class for handling partitions tables
+    """
     def _list_vol_fs(self) -> list:
-      return [volume for volume in self for fs in self._tsk_fs if fs in volume.desc]
+      return [volume for volume in self for fs in SUPPORTED_FS if fs in volume.desc]
 
     def __init__(self, partitions:list) -> None:
       super().__init__(partitions)
@@ -44,7 +63,6 @@ class Fouine():
       except Exception as e:
         print(f"{e} \n {Fore.YELLOW} NOTE: Runtime Error can occur if your EWF image is incomplete{Style.RESET_ALL}")
       
- 
     def __repr__(self):
       ret = ""
       for part in self:
@@ -57,10 +75,10 @@ class Fouine():
 
   def _get_fs(self, part_idx=None) -> list:
     if part_idx:
-      return [pytsk3.FS_Info(self.img, offset=p.start*512)
-               for p in self.partition_table if int(p.addr) == part_idx]
-    return [pytsk3.FS_Info(self.img, offset=p.start*512)
-              for p in self.partition_table.fs_vols]
+      return [FilesystemHelper(self.img, part)
+               for part in self.partition_table if int(p.addr) == part_idx]
+    return [FilesystemHelper(self.img, part)
+              for part in self.partition_table.fs_vols]
 
   def __init__(self, filename:str=None,) -> None:
     self.raw = filename
