@@ -1,7 +1,9 @@
 import pyewf
 import pytsk3
 from colorama import Fore, Style
-from .tsk3_helper import *
+from typing import Optional, Union
+
+from tsk3_helper import *
 
 class EwfImg(pytsk3.Img_Info):
   """
@@ -28,15 +30,25 @@ class EwfImg(pytsk3.Img_Info):
 
 
 class FilesystemHelper(pytsk3.FS_Info):
+  def __repr__(self):
+    return f"{Fore.MAGENTA}TYPE: {Fore.YELLOW} {self.fs_type}"
+
   def __init__(self, img, partition):
     super(FilesystemHelper, self).__init__(img, offset=(partition.start*512))
     self.fs_type = FS_TYPE_ENUM(self.info.ftype)
-  def fstype():
+  def fstype(self, ):
     return self.fs_type.name
 
-  def ls_dir(path:str='/'):
+  def ls_dir(self, path:str='/'):
     directory = self.open_dir(path)
     return [file_handle.info.name.name for file_handle in directory]
+  
+  def read_file(self, file_path:str, raw:Optional[bool]=False):
+    file = self.open(file_path)
+    if raw:
+      return file.read_random(0, file.info.meta.size)
+    return file
+
 
 class Fouine():
   """
@@ -73,6 +85,10 @@ class Fouine():
     def from_volume_info(cls, volume):
       return cls([p for p in volume])
 
+  def _export(self, data: Union[bytes,bytearray,str], path):
+    with open(path, 'wb') as f:
+      f.write(data)
+  
   def _get_fs(self, part_idx=None) -> list:
     if part_idx:
       return [FilesystemHelper(self.img, part)
@@ -89,7 +105,28 @@ class Fouine():
     self.partition_table = self.PartitionTable.from_volume_info(self.img.partTable)
     self.filesystems = self._get_fs()
 
+  def ls_users(self, filesystemID:Optional[int]=0):
+    user_dir_ls = self.filesystems[filesystemID].ls_dir('/Users')[2:]
+    return [user for e in user_dir_ls if (not 'efault' in e) and (not 'Public' in e) and (not 'All Users' in e)]
 
+  def get_MFT(self, filesystemID:Optional[int]=0, 
+              export: Optional[bool]=False, export_path: Optional[str]=None):
+    if export:
+      if export_path:
+        self._export(self.filesystems[filesystemID].read_file('$MFT', raw=True), export_path)
+        return
+      raise ValueError("Export path was not specified dumbass")
+    return self.filesystems[filesystemID].read_file('$MFT')
+    pass
+
+  def get_news(self,):
+    pass
+
+  def ripp_reg(self,):
+    pass
+
+  def dump_browsers(self,):
+    pass
 
 '''
 Il faut réaliser un outil en Python pour extraire les fichiers intéressants pour le forensic, d'une image disque au format EWF, celle utilisée en cours par exemple.
