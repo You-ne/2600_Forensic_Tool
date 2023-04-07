@@ -3,8 +3,11 @@ import pytsk3
 from colorama import Fore, Style
 from typing import Optional, Union
 
-from tsk3_helper import *
-
+from tsk3_helper import ( SUPPORTED_FS, DEFAULT_USER,
+                        FS_TYPE_ENUM, FILE_TYPE_ENUM,
+                        HKEYArtefacts, WindowsNews,
+                        WindowsBrowser,
+                        )
 class EwfImg(pytsk3.Img_Info):
   
   def _get_partitions(self):
@@ -168,27 +171,27 @@ class Fouine():
     """
     def _list_vol_fs(self) -> list:
       """
-      The _list_vol_fs function is a generator that returns a list of all volumes
-      that have one of the supported filesystems in their description.  This is used
-      to determine which volumes are available for mounting.
-      
-      :param self: Used to Access the class attributes.
-      :return: A list of volumes that have a filesystem in the supported_fs list.
-      
-      :doc-author: Trelent
+        The _list_vol_fs function is a generator that returns a list of all volumes
+        that have one of the supported filesystems in their description.  This is used
+        to determine which volumes are available for mounting.
+        
+        :param self: Used to Access the class attributes.
+        :return: A list of volumes that have a filesystem in the supported_fs list.
+        
+        :doc-author: Trelent
       """
       return [volume for volume in self for fs in SUPPORTED_FS if fs in volume.desc]
 
     def __init__(self, partitions:list) -> None:
       """
-      The __init__ function is the first function that is called when you create a new instance of a class.
-      It's job is to initialize all of the attributes for an object.
-      
-      :param self: Used to Represent the instance of the class.
-      :param partitions:list: Used to Pass the list of partitions to the parent class.
-      :return: None.
-      
-      :doc-author: Trelent
+        The __init__ function is the first function that is called when you create a new instance of a class.
+        It's job is to initialize all of the attributes for an object.
+        
+        :param self: Used to Represent the instance of the class.
+        :param partitions:list: Used to Pass the list of partitions to the parent class.
+        :return: None.
+        
+        :doc-author: Trelent
       """
 
       super().__init__(partitions)
@@ -202,14 +205,14 @@ class Fouine():
       
     def __repr__(self):
       """
-      The __repr__ function is used to return a string representation of the object.
-      This is useful for debugging and logging purposes, as well as for interactive use in the Python shell.
-      The __repr__ function should return a string that can be parsed by eval() to recreate an equivalent object.
-      
-      :param self: Used to Represent the instance of the class.
-      :return: A string representation of the object.
-      
-      :doc-author: Trelent
+        The __repr__ function is used to return a string representation of the object.
+        This is useful for debugging and logging purposes, as well as for interactive use in the Python shell.
+        The __repr__ function should return a string that can be parsed by eval() to recreate an equivalent object.
+        
+        :param self: Used to Represent the instance of the class.
+        :return: A string representation of the object.
+        
+        :doc-author: Trelent
       """
       ret = ""
       for part in self:
@@ -219,14 +222,14 @@ class Fouine():
     @classmethod
     def from_volume_info(cls, volume):
       """
-      The from_volume_info function is a class method that takes in a volume and returns an instance of the VolumeInfo class.
-      The volume is iterated over, and each page is added to the list of pages for this instance.
-      
-      :param cls: Used to Create a new instance of the class.
-      :param volume: Used to Create a list of pages.
-      :return: A list of pages.
-      
-      :doc-author: Trelent
+        The from_volume_info function is a class method that takes in a volume and returns an instance of the VolumeInfo class.
+        The volume is iterated over, and each page is added to the list of pages for this instance.
+        
+        :param cls: Used to Create a new instance of the class.
+        :param volume: Used to Create a list of pages.
+        :return: A list of pages.
+        
+        :doc-author: Trelent
       """
       return cls([p for p in volume])
 
@@ -254,15 +257,15 @@ class Fouine():
   
   def _get_fs(self, part_idx=None) -> list:
     """
-    The _get_fs function is a helper function that returns a list of FilesystemHelper objects.
-    It takes an optional argument, part_idx, which is the index of the partition to be returned.
-    If no part_idx is given, it will return all partitions in the image.
-    
-    :param self: Used to Access the instance of the class.
-    :param part_idx=None: Used to Specify a default value for the part_idx parameter.
-    :return: A list of filesystemhelper objects.
-    
-    :doc-author: Trelent
+      The _get_fs function is a helper function that returns a list of FilesystemHelper objects.
+      It takes an optional argument, part_idx, which is the index of the partition to be returned.
+      If no part_idx is given, it will return all partitions in the image.
+      
+      :param self: Used to Access the instance of the class.
+      :param part_idx=None: Used to Specify a default value for the part_idx parameter.
+      :return: A list of filesystemhelper objects.
+      
+      :doc-author: Trelent
     """
     if part_idx:
       return [FilesystemHelper(self.img, part)
@@ -272,17 +275,17 @@ class Fouine():
 
   def __init__(self, filename:str=None,) -> None:
     """
-    The __init__ function is called when the class is instantiated.
-    It sets up the instance of the class, and defines all of its attributes.
-    The __init__ function takes in a filename as an argument, which it then uses to open a handle to that file using pyewf's open() method.
-    It then creates an EwfImg object from that handle (which is used for reading data from disk), and gets its partition table using EwfImg's partTable attribute.
-    
-    :param self: Used to Represent the instance of the class.
-    :param filename:str=None: Used to Specify the filename of the image.
-    :param : Used to Store the filename of the image.
-    :return: None.
-    
-    :doc-author: Trelent
+      The __init__ function is called when the class is instantiated.
+      It sets up the instance of the class, and defines all of its attributes.
+      The __init__ function takes in a filename as an argument, which it then uses to open a handle to that file using pyewf's open() method.
+      It then creates an EwfImg object from that handle (which is used for reading data from disk), and gets its partition table using EwfImg's partTable attribute.
+      
+      :param self: Used to Represent the instance of the class.
+      :param filename:str=None: Used to Specify the filename of the image.
+      :param : Used to Store the filename of the image.
+      :return: None.
+      
+      :doc-author: Trelent
     """
     self.raw = filename
     self.filenames = pyewf.glob(self.raw) if self.raw else None
@@ -293,24 +296,24 @@ class Fouine():
     self.filesystems = self._get_fs()
 
   def ls_users(self, filesystemID:Optional[int]=0):
-    user_dir_ls = self.filesystems[filesystemID].ls_dir('/Users')[2:]
-    return [user for e in user_dir_ls if (not 'efault' in e) and (not 'Public' in e) and (not 'All Users' in e)]
-
+    user_ls_dir = self.filesystems[filesystemID].ls_dir('/Users')[2:]
+    return [u for u in user_ls_dir if not u in DEFAULT_USER]
+  
   def get_MFT(self, filesystemID:Optional[int]=0, 
               export: Optional[bool]=False, export_path: Optional[str]=None):
     """
-    The get_MFT function is used to retrieve the MFT from a specified filesystem.
-    The function takes two optional arguments:
-      - export (bool): If set to True, the function will export the raw MFT data as a binary file.
-      - export_path (str): The path where you want to save your exported file. This argument is required if you specify 'export' as True.
-    
-    :param self: Used to Refer to the object itself.
-    :param filesystemID:Optional[int]=0: Used to Specify the filesystem to use.
-    :param export:Optional[bool]=False: Used to Determine whether or not the user wants to export the file.
-    :param export_path:Optional[str]=None: Used to Specify the path to export the mft file to.
-    :return: The mft of the specified filesystem.
-    
-    :doc-author: Trelent
+      The get_MFT function is used to retrieve the MFT from a specified filesystem.
+      The function takes two optional arguments:
+        - export (bool): If set to True, the function will export the raw MFT data as a binary file.
+        - export_path (str): The path where you want to save your exported file. This argument is required if you specify 'export' as True.
+      
+      :param self: Used to Refer to the object itself.
+      :param filesystemID:Optional[int]=0: Used to Specify the filesystem to use.
+      :param export:Optional[bool]=False: Used to Determine whether or not the user wants to export the file.
+      :param export_path:Optional[str]=None: Used to Specify the path to export the mft file to.
+      :return: The mft of the specified filesystem.
+      
+      :doc-author: Trelent
     """
     if export:
       if export_path:
@@ -330,23 +333,23 @@ class Fouine():
     pass
 
 '''
-Il faut réaliser un outil en Python pour extraire les fichiers intéressants pour le forensic, d'une image disque au format EWF, celle utilisée en cours par exemple.
+  Il faut réaliser un outil en Python pour extraire les fichiers intéressants pour le forensic, d'une image disque au format EWF, celle utilisée en cours par exemple.
 
-Vous devez extraire au minimum :
+  Vous devez extraire au minimum :
 
-- les fichiers du registre système et les ruches utilisateur,
-- Les navigateurs Internet Edge, Internet Explorer, Firefox et Chrome,
-- les journaux Windows Security et System au minimum,
-- et la MFT
+  - les fichiers du registre système et les ruches utilisateur,
+  - Les navigateurs Internet Edge, Internet Explorer, Firefox et Chrome,
+  - les journaux Windows Security et System au minimum,
+  - et la MFT
 
-La liste des fichiers à extraire devra être au format yaml, notamment pour indiquer les outils / commandes à utiliser par la suite (B.2).
-Il ne s'agit pas d'être exhaustif, mais de prendre en compte les données sources étudiées en cours.
-Il est conseillé d'utiliser des expressions régulières, mais seuls les fichiers prévus doivent être extraits.
+  La liste des fichiers à extraire devra être au format yaml, notamment pour indiquer les outils / commandes à utiliser par la suite (B.2).
+  Il ne s'agit pas d'être exhaustif, mais de prendre en compte les données sources étudiées en cours.
+  Il est conseillé d'utiliser des expressions régulières, mais seuls les fichiers prévus doivent être extraits.
 
-Il est également conseillé d'utiliser, en back end, les commandes The Sleuth Kit suivantes: mmls, fls et icat
+  Il est également conseillé d'utiliser, en back end, les commandes The Sleuth Kit suivantes: mmls, fls et icat
 
-On restreindra l'outil aux fichiers à extraire venant dune image Windows 7 à Windows 11.
+  On restreindra l'outil aux fichiers à extraire venant dune image Windows 7 à Windows 11.
 
-L'outil devra fonctionner sous Windows ou Linux, avec Python 3.
+  L'outil devra fonctionner sous Windows ou Linux, avec Python 3.
 
 '''
