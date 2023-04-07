@@ -6,44 +6,148 @@ from typing import Optional, Union
 from tsk3_helper import *
 
 class EwfImg(pytsk3.Img_Info):
-  """
-  A class to manage the image dump
-  """
+  
   def _get_partitions(self):
+    """
+    The _get_partitions function is a helper function that returns the partitions of the image.
+    It is used by other functions in this class to get information about each partition.
+    
+    :param self: Used to Reference the object that is calling the function.
+    :return: A volume_info object.
+    
+    :doc-author: Trelent
+    """
     return pytsk3.Volume_Info(self)
   
   def __init__(self, ewf_handle):
+    """
+    The __init__ function is called when the class is instantiated.
+    It sets up the object and makes it ready for use.
+    
+    :param self: Used to Represent the instance of the class.
+    :param ewf_handle: Used to Pass in the ewf_handle object.
+    :return: An object of type pytsk3.
+    
+    :doc-author: Trelent
+    """
     self._ewf_handle = ewf_handle
     super(EwfImg, self).__init__(
         url="", type=pytsk3.TSK_IMG_TYPE_EXTERNAL)
     self.partTable = self._get_partitions() 
 
   def close(self):
+    """
+    The close function closes the EWF file handle.
+    
+    :param self: Used to Represent the instance of the class.
+    :return: None.
+    
+    :doc-author: Trelent
+    """
     self._ewf_handle.close()
 
   def read(self, offset, size):
+    """
+    The read function is called by the pytsk3.Img_Info class to read data from
+    the EWF file. The offset and size parameters are passed in as integers, and
+    the function returns a string of bytes.    
+    :param self: Used to Represent the instance of the class.
+    :param offset: Used to Set the position of the file pointer.
+    :param size: Used to Determine how many bytes to read from the file.
+    :return: The data read from the offset and size.
+    
+    :doc-author: Trelent
+    """
     self._ewf_handle.seek(offset)
     return self._ewf_handle.read(size)
 
   def get_size(self):
+    """
+    The get_size function returns the size of the media image.
+        
+        :returns: The size of the media image in bytes.
+    
+    :param self: Used to Refer to the object itself.
+    :return: The size of the media image.
+    
+    :doc-author: Trelent
+    """
     return self._ewf_handle.get_media_size()
 
 
 class FilesystemHelper(pytsk3.FS_Info):
   def __repr__(self):
+    """
+    The __repr__ function is used to compute the "official" string representation of an object.
+    This is how you would make an object of the class. The goal of __repr__ is to be unambiguous.
+    
+    :param self: Used to Represent the instance of the class.
+    :return: The type of the file system.
+    
+    :doc-author: Trelent
+    """
     return f"{Fore.MAGENTA}TYPE: {Fore.YELLOW} {self.fs_type}"
 
   def __init__(self, img, partition):
+    """
+    The __init__ function is called when the class is instantiated.
+    It sets up the object by assigning values to its attributes.
+    The self parameter refers to the instance of this class, and is used to access or assign attributes.
+    
+    :param self: Used to Represent the instance of the class.
+    :param img: Used to Pass the image file to the super class.
+    :param partition: Used to Determine the offset of the filesystem.
+    :return: The super function.
+    
+    :doc-author: Trelent
+    """
     super(FilesystemHelper, self).__init__(img, offset=(partition.start*512))
     self.fs_type = FS_TYPE_ENUM(self.info.ftype)
   def fstype(self, ):
+    """
+    The fstype function returns the name of the filesystem type.
+    
+    :param self: Used to Represent the instance of the class.
+    :param : Used to Return the name of the file system type.
+    :return: The name of the filesystem type.
+    
+    :doc-author: Trelent
+    """
     return self.fs_type.name
 
   def ls_dir(self, path:str='/'):
+    """
+    The ls_dir function takes a path as an argument and returns the names of all files in that directory.
+    If no path is given, it defaults to the root directory.
+    
+    :param self: Used to Represent the instance of the class.
+    :param path:str='/': Used to Set a default value for the path parameter.
+    :return: A list of all files and directories in the given directory.
+    
+    :doc-author: Trelent
+    """
     directory = self.open_dir(path)
     return [file_handle.info.name.name for file_handle in directory]
   
   def read_file(self, file_path:str, raw:Optional[bool]=False):
+    """
+    The read_file function reads a file from the filesystem.
+    
+    Args:
+      file_path (str): The path to the file to read.
+    
+      raw (Optional[bool]): If True, return the raw bytes of the file instead of an open File object. Defaults to False.
+    
+        Returns:
+          Union[File, bytes]: Either an open File object or a byte string containing all data in the requested file.
+    
+    :param self: Used to Represent the instance of the class.
+    :param file_path:str: Used to Specify the path of the file to be read.
+    :param raw:Optional[bool]=False: Used to Specify whether or not to read the file as raw data.
+    :return: A file object.
+    
+    :doc-author: Trelent
+    """
     file = self.open(file_path)
     if raw:
       return file.read_random(0, file.info.meta.size)
@@ -63,9 +167,30 @@ class Fouine():
       Class for handling partitions tables
     """
     def _list_vol_fs(self) -> list:
+      """
+      The _list_vol_fs function is a generator that returns a list of all volumes
+      that have one of the supported filesystems in their description.  This is used
+      to determine which volumes are available for mounting.
+      
+      :param self: Used to Access the class attributes.
+      :return: A list of volumes that have a filesystem in the supported_fs list.
+      
+      :doc-author: Trelent
+      """
       return [volume for volume in self for fs in SUPPORTED_FS if fs in volume.desc]
 
     def __init__(self, partitions:list) -> None:
+      """
+      The __init__ function is the first function that is called when you create a new instance of a class.
+      It's job is to initialize all of the attributes for an object.
+      
+      :param self: Used to Represent the instance of the class.
+      :param partitions:list: Used to Pass the list of partitions to the parent class.
+      :return: None.
+      
+      :doc-author: Trelent
+      """
+
       super().__init__(partitions)
       self._tsk_fs = [
       b'TFS', b'NTFS', b'FAT', b'FAT12', b'FAT16', b'FAT32', b'EXT2', b'EXT3',
@@ -76,6 +201,16 @@ class Fouine():
         print(f"{e} \n {Fore.YELLOW} NOTE: Runtime Error can occur if your EWF image is incomplete{Style.RESET_ALL}")
       
     def __repr__(self):
+      """
+      The __repr__ function is used to return a string representation of the object.
+      This is useful for debugging and logging purposes, as well as for interactive use in the Python shell.
+      The __repr__ function should return a string that can be parsed by eval() to recreate an equivalent object.
+      
+      :param self: Used to Represent the instance of the class.
+      :return: A string representation of the object.
+      
+      :doc-author: Trelent
+      """
       ret = ""
       for part in self:
         ret += f"{Fore.RED}{part.addr}  |  {Fore.BLUE}{part.start} - {part.start*512}\t\t{Fore.GREEN}{part.desc}{Style.RESET_ALL}\n"
@@ -83,13 +218,52 @@ class Fouine():
     
     @classmethod
     def from_volume_info(cls, volume):
+      """
+      The from_volume_info function is a class method that takes in a volume and returns an instance of the VolumeInfo class.
+      The volume is iterated over, and each page is added to the list of pages for this instance.
+      
+      :param cls: Used to Create a new instance of the class.
+      :param volume: Used to Create a list of pages.
+      :return: A list of pages.
+      
+      :doc-author: Trelent
+      """
       return cls([p for p in volume])
 
   def _export(self, data: Union[bytes,bytearray,str], path):
+    """
+    The _export function is used to export data from the database.
+    
+    The _export function is called by the export_data function, which is a public API method. The _export function takes two arguments:
+    
+      1) data - This argument should be a bytes-like object (bytes, bytearray or str). It represents the data that will be exported to disk.
+    
+      2) path - This argument should be a string representing an absolute filepath on disk where you want your exported file to go.
+    
+    :param self: Used to Access the class attributes.
+    :param data:Union[bytes: Used to Specify the type of data that is going to be passed in.
+    :param bytearray: Used to Convert the data to bytes.
+    :param str]: Used to Specify the type of data that can be passed to the function.
+    :param path: Used to Specify the path of the file to be written.
+    :return: Nothing.
+    
+    :doc-author: Trelent
+    """
     with open(path, 'wb') as f:
       f.write(data)
   
   def _get_fs(self, part_idx=None) -> list:
+    """
+    The _get_fs function is a helper function that returns a list of FilesystemHelper objects.
+    It takes an optional argument, part_idx, which is the index of the partition to be returned.
+    If no part_idx is given, it will return all partitions in the image.
+    
+    :param self: Used to Access the instance of the class.
+    :param part_idx=None: Used to Specify a default value for the part_idx parameter.
+    :return: A list of filesystemhelper objects.
+    
+    :doc-author: Trelent
+    """
     if part_idx:
       return [FilesystemHelper(self.img, part)
                for part in self.partition_table if int(p.addr) == part_idx]
@@ -97,6 +271,19 @@ class Fouine():
               for part in self.partition_table.fs_vols]
 
   def __init__(self, filename:str=None,) -> None:
+    """
+    The __init__ function is called when the class is instantiated.
+    It sets up the instance of the class, and defines all of its attributes.
+    The __init__ function takes in a filename as an argument, which it then uses to open a handle to that file using pyewf's open() method.
+    It then creates an EwfImg object from that handle (which is used for reading data from disk), and gets its partition table using EwfImg's partTable attribute.
+    
+    :param self: Used to Represent the instance of the class.
+    :param filename:str=None: Used to Specify the filename of the image.
+    :param : Used to Store the filename of the image.
+    :return: None.
+    
+    :doc-author: Trelent
+    """
     self.raw = filename
     self.filenames = pyewf.glob(self.raw) if self.raw else None
     self.handle = pyewf.handle()
@@ -111,6 +298,20 @@ class Fouine():
 
   def get_MFT(self, filesystemID:Optional[int]=0, 
               export: Optional[bool]=False, export_path: Optional[str]=None):
+    """
+    The get_MFT function is used to retrieve the MFT from a specified filesystem.
+    The function takes two optional arguments:
+      - export (bool): If set to True, the function will export the raw MFT data as a binary file.
+      - export_path (str): The path where you want to save your exported file. This argument is required if you specify 'export' as True.
+    
+    :param self: Used to Refer to the object itself.
+    :param filesystemID:Optional[int]=0: Used to Specify the filesystem to use.
+    :param export:Optional[bool]=False: Used to Determine whether or not the user wants to export the file.
+    :param export_path:Optional[str]=None: Used to Specify the path to export the mft file to.
+    :return: The mft of the specified filesystem.
+    
+    :doc-author: Trelent
+    """
     if export:
       if export_path:
         self._export(self.filesystems[filesystemID].read_file('$MFT', raw=True), export_path)
