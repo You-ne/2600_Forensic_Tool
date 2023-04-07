@@ -3,7 +3,7 @@ import pytsk3
 from colorama import Fore, Style
 from typing import Optional, Union
 
-from tsk3_helper import ( SUPPORTED_FS, DEFAULT_USER,
+from _helper import ( SUPPORTED_FS, DEFAULT_USER,
                         FS_TYPE_ENUM, FILE_TYPE_ENUM,
                         HKEYArtefacts, WindowsNews,
                         WindowsBrowser,
@@ -155,6 +155,9 @@ class FilesystemHelper(pytsk3.FS_Info):
     if raw:
       return file.read_random(0, file.info.meta.size)
     return file
+
+
+
 
 
 class Fouine():
@@ -322,6 +325,22 @@ class Fouine():
       raise ValueError("Export path was not specified dumbass")
     return self.filesystems[filesystemID].read_file('$MFT')
     pass
+
+  def _enumerate_available_hkeys(self, username, filesystemID:int=0):
+    self.available_hkeys = []
+    for hkey in HKEYArtefacts:
+      try:
+        path = hkey.get_path(username)
+        hive = self.filesystems[filesystemID].read_file(path)
+      except:
+        pass
+      self.available_hkeys.append(hkey)
+    return self.available_hkeys.append(hkey)
+
+  def get_hkeys(self, filesystemID:int=0):
+    hkeys = {}
+    for hkey in self.available_hkeys:
+      hkeys[hkey.name] = self.filesystems[filesystemID].read_file(HKEYArtefacts(hkey))
 
   def get_news(self,):
     pass
