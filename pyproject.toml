@@ -24,12 +24,13 @@ readme = "Readme.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-
-###
 libewf-python = "^20230212"
 argparse = "^1.4.0"
 pytsk3 = "^20230125"
 regrippy = "^2.0.0"
+ipython = "^8.12.0"
+
+###
 
 [tool.poetry.group.dev]
 optional = true
@@ -39,11 +40,11 @@ isort = "^5.12.0"
 black = "^23.1.0"
 mypy = "^1.1.1"
 pytest = "^7.2.2"
-
-###
 flakeheaven = "^3.2.1"
 flake8-commas = "^2.1.0"
 flake8-quotes = "^3.3.2"
+
+###
 
 [tool.poetry.group.docs]
 optional = true
@@ -82,8 +83,8 @@ max-line-length = 88
 max-complexity = 18
 
 [tool.flakeheaven.plugins]
-pycodestyle = ["+*"]
-pyflakes = ["+*"]
+pycodestyle = ["+*", "-E501", "-E722", "-E266"]
+pyflakes = ["+*", "-F401"]
 mccabe = ["+*"]
 flake8-commas = ["+*"]
 flake8-quotes = ["+*", "-Q000"]
@@ -98,7 +99,7 @@ flake8-quotes = ["+*", "-Q000"]
 verbose = 'True'
 profile = 'black'
 py_version = '310'
-known_third_party = []
+known_third_party = ["_helper", "colorama", "fouine", "pyewf", "pytsk3"]
 group_by_package = 'True'
 skip_gitignore = 'True'
 combine_as_imports = 'True'
