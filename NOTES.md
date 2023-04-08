@@ -10,4 +10,4 @@
     Specifi the output dir desired by the user. If none, create ./Fouined
 
 -c --config
-    Specify the config file path. By default, will look in present directory. If none precised and found, all modules are on
+    Specify the config file path. By default, will look in present directory. If not precised and not found, all modules are on.
