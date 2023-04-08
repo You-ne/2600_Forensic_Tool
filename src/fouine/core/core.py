@@ -414,27 +414,30 @@ class Fouine:
         self,
         filesystemID: int = 0,
         filter: Optional[list[str]] = False, # filter should be a list of hkey.name values
+        export: Optional[bool] = False,
         export_path: Optional[str] = False,
     ) -> list[dict]:
-        hk = {}
         if not self.available_hkeys:
           self._enumerate_available_hkeys(filesystemID)
-
+        print('start')
         for hkey in self.available_hkeys:
+            print('c')
             if filter:
                 if hkey.name in filter:
                     continue
-            if export_path:
+            print(f"-{export_path}- t: {type(export_path)} {export_path is True}")    
+            if export:
+                print(f"test export {export_path}")
                 try:
                     if export_path == "" or ".":
                         if not os.path.exists("./_FOUINE_EXPORTS"):
                             os.mkdir("_FOUINE_EXPORTS")
                         self._write_data(
                             hkey.file.raw_data,
-                            "./_FOUINE_EXPORTS",
+                            f"./_FOUINE_EXPORTS/{hkey.name}",
                         )
                     else:
-                        self._write_data(hkey.file.raw_data, export_path)
+                        self._write_data(hkey.file.raw_data, f"{export_path}/{hkey.name}")
                 except Exception as e:
                     print(f"{e}  -  We were not able to export data to host!")
         return self.available_hkeys
