@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import logging
 from functools import wraps
 from typing import Optional
@@ -25,7 +25,7 @@ class ColorFormatter(logging.Formatter):
         return f"{color}{message}{Style.RESET_ALL}"
 
 
-def set_logs(args) -> logging.logger:
+def set_logs(args) -> logging.Logger:
     """Sets the `logging` module with correct values from cli arguments.
 
     Receives the arguments from the `fouine.core.parsing.ParseArgs`
@@ -56,7 +56,6 @@ def set_logs(args) -> logging.logger:
     logging.basicConfig(
         level=loglevel,
         format="%(levelname)s %(message)s",
-        filename=logname,
         handlers=[logging.FileHandler(logname), logging.StreamHandler()],
     )
     logger = logging.getLogger()

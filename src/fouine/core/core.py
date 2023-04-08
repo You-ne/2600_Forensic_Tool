@@ -15,6 +15,20 @@ from _helper import (
 from colorama import Fore, Style
 
 
+class File():
+    def __init__(self, file:pytsk3.File) -> None:
+        self.file = file
+        self.raw_data = self.file.read_random(0, self.file.info.meta.size)
+
+class HKEY():
+    def __init__(self, name: Union[str,bytes], path: Union[str,bytes], file: Optional[File]) -> None:
+        self.name = name
+        self.path = path
+        self.file = file if file else None
+    
+    def __repr__(self,):
+        return f"{Fore.LIGHTGREEN_EX}{self.name} {Fore.YELLOW}{self.path}\n"
+
 class EwfImg(pytsk3.Img_Info):
     def _get_partitions(self):
         """
@@ -159,9 +173,7 @@ class FilesystemHelper(pytsk3.FS_Info):
 
         :doc-author: Telio
         """
-        file = self.open(file_path)
-        setattr(file, "raw_data", file.read_random(0, file.info.meta.size))
-        return file
+        return File(self.open(file_path))
 
 
 class Fouine:
@@ -189,9 +201,7 @@ class Fouine:
 
             :doc-author: Telio
             """
-            return [
-                volume for volume in self for fs in SUPPORTED_FS if fs in volume.desc
-            ]
+            return [volume for volume in self for fs in SUPPORTED_FS if fs in volume.desc]
 
         def __init__(self, partitions: list) -> None:
             """
@@ -285,7 +295,6 @@ class Fouine:
         self.filesystems = self._get_fs()
         self.system_users = []
         self.available_hkeys = []
-        self.hkeys = []
 
     def _write_data(self, data: Union[bytes, bytearray, str], path):
         """
@@ -327,19 +336,26 @@ class Fouine:
                 for part in self.partition_table
                 if int(part.addr) == part_idx
             ]
-        return [
-            FilesystemHelper(self.img, part) for part in self.partition_table.fs_vols
-        ]
+        return [FilesystemHelper(self.img, part) for part in self.partition_table.fs_vols]
 
-    def _enumerate_available_hkeys(self, username, filesystemID: int = 0) -> None:
+    def _enumerate_available_hkeys(self, filesystemID: int = 0) -> None:
+        if not self.system_users:
+            self.list_users(filesystemID)
         for hkey in HKEYArtefacts:
-            try:
-                path = hkey.get_path(username)
-                hive = self.filesystems[filesystemID].read_file(path)
-            except:
-                pass
-            if hkey not in self.available_hkeys:
-                self.available_hkeys.append(hkey)
+          try:
+              if hkey.name == 'HKEY_USERS_NT':
+                  for u in self.system_users:
+                      path = hkey.get_path(u)
+                      file = self.filesystems[filesystemID].read_file(path.decode('ascii'))
+                      HK = HKEY(hkey.name, path, file)
+              else:
+                path = hkey.get_path('')
+                file = self.filesystems[filesystemID].read_file(path.decode('ascii'))
+                HK = HKEY(hkey.name, path, file)
+          except:
+              continue
+          self.available_hkeys.append(HK)
+        return self.available_hkeys
 
     def write_file(
         self,
@@ -393,45 +409,35 @@ class Fouine:
                 return
             raise ValueError("Export path was not specified dumbass")
         return self.filesystems[filesystemID].read_file("$MFT")
-        pass
 
     def get_hkeys_files(
         self,
         filesystemID: int = 0,
-        filter: Optional[list[HKEYArtefacts]] = False,
+        filter: Optional[list[str]] = False, # filter should be a list of hkey.name values
         export_path: Optional[str] = False,
     ) -> list[dict]:
         hk = {}
         if not self.available_hkeys:
-            if not self.system_users:
-                self.list_users(filesystemID)
-            for u in self.system_users:
-                self._enumerate_available_hkeys(u)
+          self._enumerate_available_hkeys(filesystemID)
 
         for hkey in self.available_hkeys:
             if filter:
-                if hkey in filter:
+                if hkey.name in filter:
                     continue
-                hk[hkey.name] = self.filesystems[filesystemID].read_file(
-                    HKEYArtefacts(hkey).get_path(),
-                )
-                self.hkeys.append(hk)
-                if export_path:
-                    try:
-                        if export_path == "" or ".":
-                            if not os.path.exists("./_FOUINE_EXPORTS"):
-                                os.mkdir("_FOUINE_EXPORTS")
-                            self._write_data(
-                                self.hkeys[hkey.name].raw_data,
-                                "./_FOUINE_EXPORTS",
-                            )
-                        else:
-                            self._write_data(
-                                self.hkeys[hkey.name].raw_data, export_path
-                            )
-                    except Exception as e:
-                        print(f"{e}  -  We were not able to export data to host!")
-        return self.hkeys
+            if export_path:
+                try:
+                    if export_path == "" or ".":
+                        if not os.path.exists("./_FOUINE_EXPORTS"):
+                            os.mkdir("_FOUINE_EXPORTS")
+                        self._write_data(
+                            hkey.file.raw_data,
+                            "./_FOUINE_EXPORTS",
+                        )
+                    else:
+                        self._write_data(hkey.file.raw_data, export_path)
+                except Exception as e:
+                    print(f"{e}  -  We were not able to export data to host!")
+        return self.available_hkeys
 
     def get_news(
         self,

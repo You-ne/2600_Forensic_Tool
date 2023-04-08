@@ -55,18 +55,16 @@ class FILE_TYPE_ENUM(Enum):
     SHADOW_I = pytsk3.TSK_FS_NAME_TYPE_SHAD  # Shadow inode (solaris)
     WHT = pytsk3.TSK_FS_NAME_TYPE_WHT  # Whiteout (openbsd)
     VIRT_FILE = pytsk3.TSK_FS_NAME_TYPE_VIRT  # Special (TSK added "Virtual" files)
-    VIRT_DIR = (
-        pytsk3.TSK_FS_NAME_TYPE_VIRT_DIR
-    )  # Special (TSK added "Virtual" directories)
+    VIRT_DIR = pytsk3.TSK_FS_NAME_TYPE_VIRT_DIR  # Special (TSK added "Virtual" directories)
 
 
 class HKEYArtefacts(Enum):
-    HKEY_LOCAL_MACHINE_SAM = "/Windows/System32/config/SAM"
-    HKEY_LOCAL_MACHINE_SOFTWARE = "/Windows/System32/config/SOFTWARE"
-    HKEY_LOCAL_MACHINE_SYSTEM = "/Windows/System32/config/SYSTEM"
-    HKEY_USERS_NT = "/Users/<username>/NTUSER.DAT"
-    HKEY_USERS_DEFAULT = "/Windows/System32/config/DEFAULT"
-    HKEY_USERS_SID = "/Windows/System32/config/SID"
+    HKEY_LOCAL_MACHINE_SAM = b"/Windows/System32/config/SAM"
+    HKEY_LOCAL_MACHINE_SOFTWARE = b"/Windows/System32/config/SOFTWARE"
+    HKEY_LOCAL_MACHINE_SYSTEM = b"/Windows/System32/config/SYSTEM"
+    HKEY_USERS_NT = b"/Users/<username>/NTUSER.DAT"
+    HKEY_USERS_DEFAULT = b"/Windows/System32/config/DEFAULT"
+    HKEY_USERS_SID = b"/Windows/System32/config/SID"
 
     def __init__(self, path):
         self._path_template = path
@@ -78,7 +76,7 @@ class HKEYArtefacts(Enum):
             if username is None:
                 raise ValueError("Username is required for HKEY_USERS_NT.")
             else:
-                return self._path_template.replace("<username>", username)
+                return self._path_template.replace(b"<username>", username)
 
 
 class WindowsNews(Enum):
