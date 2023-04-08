@@ -1,9 +1,10 @@
 import os
+import re
 from typing import Optional, Union
 
 import pyewf
 import pytsk3
-from _helper import (
+from ._helper import (
     DEFAULT_USER,
     FILE_TYPE_ENUM,
     FS_TYPE_ENUM,
@@ -140,9 +141,9 @@ class FilesystemHelper(pytsk3.FS_Info):
         """
         return self.fs_type.name
 
-    def ls_dir(self, path: str = "/"):
+    def ls(self, path: str = "/"):
         """
-        The ls_dir function takes a path as an argument and returns the names of all files in that directory.
+        The ls function takes a path as an argument and returns the names of all files in that directory.
         If no path is given, it defaults to the root directory.
 
         :param self: Used to Represent the instance of the class.
@@ -154,7 +155,7 @@ class FilesystemHelper(pytsk3.FS_Info):
         directory = self.open_dir(path)
         return [file_handle.info.name.name for file_handle in directory]
 
-    def read_file(self, file_path: str):
+    def read_file(self, file_path: str) -> File:
         """
         The read_file function reads a file from the filesystem.
 
@@ -271,7 +272,8 @@ class Fouine:
 
     def __init__(
         self,
-        filename: str = None,
+        filename: str,
+        logger
     ) -> None:
         """
         The __init__ function is called when the class is instantiated.
@@ -287,6 +289,7 @@ class Fouine:
         :doc-author: Telio
         """
         self.raw = filename
+        self.logger =logger
         self.filenames = pyewf.glob(self.raw) if self.raw else None
         self.handle = pyewf.handle()
         self.handle.open(self.filenames)
@@ -295,7 +298,17 @@ class Fouine:
         self.filesystems = self._get_fs()
         self.system_users = []
         self.available_hkeys = []
+        try:
+            self.list_users()
+        except:
+            pass
 
+    def _get_file(self, filename, filesystemID: int =0) -> File:
+        return self.filesystems[filesystemID].read_file(filename)
+
+    def _ls(self, path, filesystemID: int =0) -> list:
+        return self.filesystems[filesystemID].ls(path)
+  
     def _write_data(self, data: Union[bytes, bytearray, str], path):
         """
         The _export function is used to export data from the database.
@@ -317,6 +330,11 @@ class Fouine:
         """
         with open(path, "wb") as f:
             f.write(data)
+
+    def _find_file_in_dir(self, path: str, rexpr:str, filesystemID: int = 0):
+        rexpr = re.compile(rexpr)
+        dir = self._ls(path)
+        return [file for file in dir if rexpr.match(file.decode())]
 
     def _get_fs(self, part_idx=None) -> list:
         """
@@ -346,11 +364,11 @@ class Fouine:
               if hkey.name == 'HKEY_USERS_NT':
                   for u in self.system_users:
                       path = hkey.get_path(u)
-                      file = self.filesystems[filesystemID].read_file(path.decode('ascii'))
+                      file = self._get_file(filesystemID=filesystemID, filename=path.decode('ascii'))
                       HK = HKEY(hkey.name, path, file)
               else:
                 path = hkey.get_path('')
-                file = self.filesystems[filesystemID].read_file(path.decode('ascii'))
+                file = self._get_file(filesystemID=filesystemID, filename=path.decode('ascii'))
                 HK = HKEY(hkey.name, path, file)
           except:
               continue
@@ -361,10 +379,10 @@ class Fouine:
         self,
         ewf_path: str,
         host_path: str,
-        filesystemID: Optional[int] = 0,
+        filesystemID: int = 0,
     ) -> int:
         try:
-            file = self.filesystems[filesystemID].read_file(ewf_path)
+            file = self._get_file(filesystemID=filesystemID, filename=ewf_path)
         except Exception as e:
             print(f"{e}  -  Can't access requested file on EWF image!")
             return -1
@@ -375,40 +393,58 @@ class Fouine:
             return -2
         return 0
 
-    def list_users(self, filesystemID: Optional[int] = 0) -> list[bytes]:
-        user_ls_dir = self.filesystems[filesystemID].ls_dir("/Users")[2:]
-        self.system_users = [u for u in user_ls_dir if u not in DEFAULT_USER]
+    def _format_windows_path(self, path: str) :
+      paths = []
+      path = path.replace('\\', '/')
+      path = path.replace('//', '/')
+      path = path.replace('C:', '')
+      self.logger.debug(path)
+      if '%user%' in path:
+          for u in self.system_users:
+              self.logger.debug(f"user: {u}")
+              paths.append(path.replace('%user%', u.decode()))
+          self.logger.debug(f"FMTWINDWS RET: {paths}")
+          return paths
+      paths.append(path)
+      self.logger.debug(f"FMTWINDWS RET: {paths}")
+      return paths
+    
+    def _format_arg_list(self, arglist) -> list:
+        new_list = []
+        for couple in arglist:
+            prefix = couple[0]
+            path = couple[1]
+            tmp = self._format_windows_path(path)
+            for p in tmp:
+                new_list.append([prefix, p])
+        print(new_list)
+        return new_list
+              
+    def write_from_parser(self, arglist: list, filesystemID: int = 0) -> None:
+        fmtargs = self._format_arg_list(arglist)
+        self.logger.debug('Begin')
+        for couple in fmtargs:
+          ewf_file = couple[1]
+          ewf_dir, se, file = ewf_file.rpartition('/')
+          host_file = couple[0]+couple[1]
+          self.logger.debug
+          directory, s, name = host_file.rpartition('/')
+          #if not os.path.exists(directory): 
+          #    os.makedirs(directory, mode=0o740)
+          try:
+            if ('*' or'[') in file:
+                files = self._find_file_in_dir(path=ewf_dir, rexpr=file, filesystemID=filesystemID)
+                pass
+            self.write_file(
+              ewf_path=ewf_file, host_path=host_file,
+              filesystemID=filesystemid)
+          except:
+              self.logger.info(f"CANT ACCES {ewf_file} SORRY")
+
+    def list_users(self, filesystemID: int = 0) -> list[bytes]:
+        user_ls = self.filesystems[filesystemID].ls("/Users")[2:]
+        self.system_users = [u for u in user_ls if u not in DEFAULT_USER]
         return self.system_users
-
-    def get_MFT(
-        self,
-        filesystemID: Optional[int] = 0,
-        export: Optional[bool] = False,
-        export_path: Optional[str] = None,
-    ):
-        """
-        The get_MFT function is used to retrieve the MFT from a specified filesystem.
-        The function takes two optional arguments:
-          - export (bool): If set to True, the function will export the raw MFT data as a binary file.
-          - export_path (str): The path where you want to save your exported file. This argument is required if you specify 'export' as True.
-
-        :param self: Used to Refer to the object itself.
-        :param filesystemID:Optional[int]=0: Used to Specify the filesystem to use.
-        :param export:Optional[bool]=False: Used to Determine whether or not the user wants to export the file.
-        :param export_path:Optional[str]=None: Used to Specify the path to export the mft file to.
-        :return: The mft of the specified filesystem.
-
-        :doc-author: Telio
-        """
-        if export:
-            if export_path:
-                self._export(
-                    self.filesystems[filesystemID].read_file("$MFT", raw=True),
-                    export_path,
-                )
-                return
-            raise ValueError("Export path was not specified dumbass")
-        return self.filesystems[filesystemID].read_file("$MFT")
 
     def get_hkeys_files(
         self,
@@ -442,20 +478,36 @@ class Fouine:
                     print(f"{e}  -  We were not able to export data to host!")
         return self.available_hkeys
 
-    def get_news(
+    def get_MFT(
         self,
-    ):
-        pass
+        filesystemID: int = 0,
+        export: Optional[bool] = False,
+        export_path: Optional[str] = None,
+    ) -> File:
+        """
+        The get_MFT function is used to retrieve the MFT from a specified filesystem.
+        The function takes two optional arguments:
+          - export (bool): If set to True, the function will export the raw MFT data as a binary file.
+          - export_path (str): The path where you want to save your exported file. This argument is required if you specify 'export' as True.
 
-    def ripp_reg(
-        self,
-    ):
-        pass
+        :param self: Used to Refer to the object itself.
+        :param filesystemID:Optional[int]=0: Used to Specify the filesystem to use.
+        :param export:Optional[bool]=False: Used to Determine whether or not the user wants to export the file.
+        :param export_path:Optional[str]=None: Used to Specify the path to export the mft file to.
+        :return: The mft of the specified filesystem.
 
-    def dump_browsers(
-        self,
-    ):
-        pass
+        :doc-author: Telio
+        """
+        file = self._get_file(filesystemID=filesystemID, filename="$MFT")
+        if export:
+            if export_path:
+                self._write_data(
+                    file.raw_data,
+                    export_path,
+                )
+                return file
+            raise ValueError("Export path was not specified dumbass")
+        return file
 
 
 """

@@ -1,5 +1,6 @@
 from enum import Enum
-
+import re
+import os
 import pytsk3
 
 SUPPORTED_FS = [
@@ -78,7 +79,7 @@ class HKEYArtefacts(Enum):
             else:
                 return self._path_template.replace(b"<username>", username)
 
-
+    
 class WindowsNews(Enum):
     WINDOWS_APPLICATION_LOG = {
         "Windows 7": "/Windows/System32/Winevt/Logs/Application.evtx",
@@ -155,3 +156,30 @@ class WindowsBrowser(Enum):
         "Windows 7": "Not available (Microsoft Edge is not supported in Windows 7)",
         "Windows 10/11": "/Users/%(user)/AppData/Local/Microsoft/Edge/User Data/Default/Cookies",
     }
+
+def dir_create(targets) -> None:
+    """Creates the directory structure to store the retrieved artifacts.
+
+    This function receives the target artifacts list. It will iterate on it, and will create a directory
+    mimicing the name of the original artifact directory, every time the directory is not arlready existing.
+    The created directories will be under a parent directory corresponding to the --output option.
+
+    Args:
+        targets(list): List of target artifacts.  Each element is itself a list, with the desired output directry as 1st element; the 2nd being the path of the desired artifact.
+    """
+
+    # Sets permissions to chmod 740
+    mode = 0o740
+
+    # Retrieves the correct directory path to create
+    for target in targets:
+        path = target[0]+target[1]
+        path = path.rpartition("/")[:1]
+        path = str(path[0])
+
+        # Creates the directories if not already existing
+        if os.path.exists(path):
+            continue
+        else:
+            os.makedirs(path, mode)
+

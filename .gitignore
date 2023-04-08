@@ -72,3 +72,12 @@ coverage.xml
 
 # PyBuilder
 target/
+
+# Fouine Exports
+_FOUINE_EXPORTS
+./_FOUINE_EXPORTS/*
+./src./_FOUINE_EXPORTS/*
+./src/fouine/_FOUINE_EXPORTS/*
+./src/fouine/core/_FOUINE_EXPORTS/*
+Fouined/
+disks/

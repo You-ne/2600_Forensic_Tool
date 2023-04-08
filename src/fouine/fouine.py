@@ -2,8 +2,13 @@
 import argparse
 import logging
 from datetime import datetime
+from prompt_toolkit import prompt
 
-from fouine.core import logs, parsing
+from fouine.core import ( _helper
+                         , core
+                         ,logs
+                         , parsing
+)
 
 
 ######################################
@@ -22,13 +27,14 @@ def main():
         parser = parsing.ParseArgs()
         parser.run()
         # Logging setting
-        logs.set_logs(parser.args)
-
+        logger = logs.set_logs(parser.args)
+        logger.info("[X]   Fouine se réveille ...")
+        fouine = core.Fouine('/home/njord/Desktop/Devs/2600/FOR/code/2600_Forensic_Tool/disks/disk.E01', logger)
         # Retrieve target artifacts list and the associated methods.
         targets = parsing.find_scope(parser.args)
-
+        _helper.dir_create(targets)
         ## HERE PASS THE TARGETS (TUPLE LIST) TO CORE.CORE
-        # Core will then call modules (class or method or idk)
+        fouine.write_from_parser(targets)
 
     except (KeyboardInterrupt, EOFError):
         print("Here should close the APP")

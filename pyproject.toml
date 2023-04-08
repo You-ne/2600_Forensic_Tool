@@ -31,6 +31,8 @@ regrippy = "^2.0.0"
 ipython = "^8.12.0"
 
 ###
+pyyaml = "^6.0"
+prompt-toolkit = "^3.0.38"
 
 [tool.poetry.group.dev]
 optional = true
@@ -68,7 +70,7 @@ fouine = 'fouine.fouine:main'
 [tool.black]
 target-version = ['py310']
 verbose = 'False'
-line-length = 88
+line-length = 100
 include = 'src/'
 
 ###############################################################################

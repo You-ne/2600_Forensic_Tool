@@ -1,9 +1,13 @@
 import argparse
+import os
+import yaml
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 
-#######################################
-# CLASS Parse Args
-class ParseArgs:
+class Parser:
     """An argument parser, based on `argparse`. Defines arguments, read them, then take appropriate action.
 
     Accepted options are:
@@ -18,7 +22,7 @@ class ParseArgs:
     """
 
     def __init__(self):
-        """__init__ method of `fouine.parsing.ParseArgs` class. Here arguments are defined.
+        """__init__ method of `fouine.parsing.Parser` class. Here arguments are defined.
 
         In this method each possible argument for `fouine` is declared using the `argparse.ArgumentParser.add_argument()` method.
         """
@@ -71,17 +75,96 @@ class ParseArgs:
         self.args = self.parser.parse_args()
 
 
-#######################################
-# CLASS Scoper
-class Scoper:
-    def __init__(self):
+
+
+
+
+def extract_yaml(configfile_path, outdir)->list:
+    """Receives the path of a .tkape, .yaml or .yml config file, and extract the contained rules.
+    Args:
+        configfile_path(str): The path of a .tkape, .yaml or .yml config file.
+        outdir(str): The path of save directory (--output option).
+    """
+    
+    # Init rules list
+    rules = list()
+
+    # Load yaml file
+    stream = open(configfile_path, 'r')
+    configfile = yaml.load(stream, Loader=Loader)
+    
+    # Retrieve extraction rules from Targets field
+    for target in configfile["Targets"]:
+        path = target["Path"]
+        if target["FileMask"]:
+            path = path+target["FileMask"]
+        if target["Recursive"]:
+            rules.append([outdir, path[2:].replace("\\", "/"), "Recursive"])
+        else:
+            rules.append([outdir, path[2:].replace("\\", "/"), "\0"])
+
+    return(rules)
+
+
+
+def find_scope(config, logger)->list:
+    """From the config file, lists the artifacts that needs recovery, and the needed methods.
+    """
+    
+    # Establish a list of path to look for config files, based on --config option
+    if "," in config:
+        cfg_paths = config.split(",")
+    else:
+        cfg_paths = config
+       
+    
+    print(f"Taking targets from {cfg_paths}")
+
+    # Retrieves targets list from each config file.
+    # The result is a list of 3 elements list. They hold the desired save path as 1st element, the artifact path as 2nd,
+    # and wether it is a file or a directory that should be explored recursively as a 3rd element.
+    targets = list()
+    for path in cfg_paths:
+        
+        # Rules are extracted if path points to a config file with proper extension.
+        if extension:=path.rpartition("/")[:1].rpartition(".")[:1] in ("yml, ""yaml", "tkape"):
+            rules = extract_yaml(path)
+            targets.append(rules)
+
+        # If path points to a directory, file are checked for proper extensio nthen rules are extracted.
+        elif extension == "":
+            dir_files = os.listdir(path)
+            for file in dir_files:
+                # Extension check
+                if file.rpartition("/")[:1].rpartition(".")[:1] in ("yml, ""yaml", "tkape"):
+                    rules = extract_yaml(file)
+                    targets.append(rules)
+                # Wrong extension warning
+                else:
+                    logger.warning(f"[!] Wrong extension for the config file {file}... It should be a yaml file with .yaml, .yml or .tkape file.\n    File Skipped. ")
+                    continue
+
+            """
+            stream = open(configfile, 'r')
+            tmp_conf = yaml.load(stream, Loader=Loader)
+
+            for entry in tmp_conf["Targets"]:
+                path = entry["Path"]
+                if entry["FileMask"]:
+                    path = path+entry["FileMask"]
+                if entry["Recursive"]:
+                    targets.append([args.output, path[2:].replace("\\", "/"), "Recursive"])
+                else:
+                    targets.append([args.output, path[2:].replace("\\", "/"), "\0"])
+            """
+        
+        # Skip file and alert if wrong file extension
+        else:
+            logger.warning(f"[!] Wrong extension for the config file {path}... It should be a yaml file with .yaml, .yml or .tkape file.\n    File Skipped. ")
+            continue
+    
+    if not targets:
+        #targets = DEFAULT_TARGETS
         pass
-
-
-def find_scope(args):
-    """From the config file, lists the artifacts that needs recovery, and the needed methods."""
-    # TEST
-    cfg_path = args.config
-    img_path = args.input
-
-    scoper = Scoper()
+    
+    return(targets)
