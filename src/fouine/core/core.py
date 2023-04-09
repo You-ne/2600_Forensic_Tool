@@ -460,7 +460,7 @@ class Fouine:
         for subdir in subdirs:
             rest_path = "*".join(parts[1:])
             new_path = base_dir + subdir + rest_path
-            results += self.expand_path(new_path)
+            results += self._expand_path(new_path)
         return results
 
     def _format_tkap_path(self, path: str):
@@ -480,7 +480,7 @@ class Fouine:
 
         for path in paths:
             paths.remove(path)
-            tmp = self.expand_path(path)
+            tmp = self._expand_path(path)
             paths.extend(tmp)
         self.logger.debug(f"FMTTKAP RET: {paths}")
         return paths

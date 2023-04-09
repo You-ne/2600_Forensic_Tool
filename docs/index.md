@@ -1,17 +1,9 @@
-# Welcome to MkDocs
+# Welcome to the Fouine's Den...
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+__Fouine__ is a python __forensic__ package.
 
-## Commands
+Its aim is to extract artifacs from an __EWF__ image. 
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+You can specify the list of desired artifacts by passing it one or more `.yaml` files.
 
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+They shall follow the __EricZimmerman__ KAPE file (*.tkape*) syntax.

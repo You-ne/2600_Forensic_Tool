@@ -18,17 +18,17 @@ nav:
   - Home: index.md
   - Installation: Installation.md
   - Tutorial: "Basic Usage.md"
+  - About Targets: "About Targets.md"
+  - About this Documentation: "About this documentation.md"
+  - License: "License.md"
   - API Documentation:
       - src/:
-        - /src/fouine/core/core.py
-        - /src/fouine/core/console.py
-        - /src/fouine/core/__init__.py
-        - /src/fouine/core/_helper.py
-        - /src/fouine/core/logs.py
-        - /src/fouine/core/_defcfg.py
-        - /src/fouine/core/parsing.py
-        - /src/fouine/__init__.py
-        - /src/fouine/fouine.py
-        - /src/fouine/modules/__init__.py
+        - fouine: "src/fouine/fouine.md"
+        - .core:
+            - ._defcfg: "src/fouine/core/_defcfg.md"
+            - ._helper: "src/fouine/core/_helper.md"
+            - .parsing: "src/fouine/core/parsing.md"
+            - .core: "src/fouine/core/core.md"
+            - .logs: "src/fouine/core/logs.md"
 
 
