@@ -29,6 +29,9 @@ class Parser:
         """__init__ method of `fouine.parsing.Parser` class. Here arguments are defined.
 
         In this method each possible argument for `fouine` is declared using the `argparse.ArgumentParser.add_argument()` method.
+
+        Args:
+            self(Parser): self
         """
 
         self.parser = argparse.ArgumentParser(
@@ -81,14 +84,14 @@ def extract_yaml(configfile_path: str, outdir: str, logger) -> list[Target]:
     """Receives the path of a .tkape, .yaml or .yml config file, and extract the contained rules.
 
     It will first check that the path points to an exitsing file, then try to load it using yaml.load().
-    
+    If the loading fails, a log message will be recorded and an empty list returned.
 
+    Otherwise, the .yaml content will be explored, and the values needed to build fouine.core._helper.Target() objects retrieved.
 
     Args:
         configfile_path(str): The path of a .tkape, .yaml or .yml config file.
         outdir(str): The path of save directory (--output option).
     """
-
 
     # Init rules list
     rules = list()

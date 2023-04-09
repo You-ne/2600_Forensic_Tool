@@ -60,11 +60,20 @@ class HKEY:
     def __repr__(
         self,
     ):
+        """
+        The __repr__ function is used to compute the "official" string representation of an object.
+        This is how you would make an object of the class. The goal of __repr__ is to be unambiguous.
+
+        :param self: Used to Represent the instance of the class.
+        :return: The type of the file system.
+
+        :doc-author: Telio
+        """
         return f"{Fore.LIGHTGREEN_EX}{self.name} {Fore.YELLOW}{self.path}\n"
 
 
 class EwfImg(pytsk3.Img_Info):
-    def _get_partitions(self):
+    def _get_vol_info(self):
         """
         The _get_partitions function is a helper function that returns the partitions of the image.
         It is used by other functions in this class to get information about each partition.
@@ -89,7 +98,7 @@ class EwfImg(pytsk3.Img_Info):
         """
         self._ewf_handle = ewf_handle
         super(EwfImg, self).__init__(url="", type=pytsk3.TSK_IMG_TYPE_EXTERNAL)
-        self.partTable = self._get_partitions()
+        self.partTable = self._get_vol_info()
 
     def close(self):
         """
@@ -423,24 +432,6 @@ class Fouine:
             self.available_hkeys.append(HK)
         return self.available_hkeys
 
-    def write_file(
-        self,
-        ewf_path: str,
-        host_path: str,
-        filesystemID: int = 0,
-    ) -> int:
-        try:
-            file = self._get_file(filesystemID=filesystemID, filename=ewf_path)
-        except Exception as e:
-            print(f"{e}  -  Can't access requested file on EWF image!")
-            return -1
-        try:
-            self._write_data(file.raw_data, host_path)
-        except Exception as e:
-            print(f"{e}  -  We were not able to export data to host!")
-            return -2
-        return 0
-
     def expand_path(self, path: str) -> list:
         if not "*" in path:
             return [path]
@@ -530,6 +521,25 @@ class Fouine:
         user_ls = self.filesystems[filesystemID].ls("/Users")[2:]
         self.system_users = [u for u in user_ls if u not in DEFAULT_USER]
         return self.system_users
+
+    def write_file(
+        self,
+        ewf_path: str,
+        host_path: str,
+        filesystemID: int = 0,
+    ) -> int:
+        try:
+            file = self._get_file(filesystemID=filesystemID, filename=ewf_path)
+        except Exception as e:
+            print(f"{e}  -  Can't access requested file on EWF image!")
+            return -1
+        try:
+            self._write_data(file.raw_data, host_path)
+        except Exception as e:
+            print(f"{e}  -  We were not able to export data to host!")
+            return -2
+        return 0
+
 
     def get_hkeys_files(
         self,
