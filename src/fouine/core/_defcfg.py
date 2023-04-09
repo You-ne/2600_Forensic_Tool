@@ -24,7 +24,7 @@ class DEFAULT_CONFIG:
     """
     def __init__(self, output: str):
         self.output = output
-        self.Targets = [
+        self.Targets = [[
             ##### MFT ##### Rules 484-485
             # rule 484
             Target(
@@ -1524,4 +1524,5 @@ class DEFAULT_CONFIG:
                 recursive=True,
                 export_path="output",
             ),
-        ]
+        ],
+    ]

@@ -118,10 +118,6 @@ def extract_yaml(configfile_path: str, outdir: str, logger) -> list[Target]:
                     logger.debug(f"{tmp[element]}  {element}")
                     logger.debug(target)
                     if tmp[element] == False:
-                            
-                            logger.debug(f"I: {i}")
-                            i += 1
-                            time.sleep(3)
                             setattr(target, 'filemask', ".*")
                 setattr(target, key, tmp[element])
                 
