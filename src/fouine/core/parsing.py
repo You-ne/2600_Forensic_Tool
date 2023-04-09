@@ -20,6 +20,7 @@ class Parser:
         -c / --config
         -v / --verbose
         -l / --logging
+        -lf / --logfile
 
     Attributes:
         parser (argparse.ArgumentParser): An `argparse` argument parser. It is used to define arguments or take actions on them.
