@@ -38,7 +38,7 @@ class File:
             Bool: True or False
         """       
         try:
-            self.file.as_direcory()
+            self.file.as_directory()
             return True
         except OSError:
             return False
@@ -216,6 +216,7 @@ class FilesystemHelper(pytsk3.FS_Info):
 
         :doc-author: Telio
         """
+        print(file_path)
         return File(self.open(file_path))
 
 
@@ -348,7 +349,7 @@ class Fouine:
     def _get_file(self, filename, filesystemID: int = 0) -> File:
         return self.filesystems[filesystemID].read_file(filename)
 
-    def _ls(self, path, filesystemID: int = 0) -> list:
+    def _ls(self, path, filesystemID: int = 0) -> list[bytes]:
         try:
             return self.filesystems[filesystemID].ls(path)
         except:
@@ -433,6 +434,8 @@ class Fouine:
         return self.available_hkeys
 
     def expand_path(self, path: str) -> list:
+        results = []
+        print(f"PATH EXPANSION: {path}")
         if not "*" in path:
             return [path]
 
@@ -442,11 +445,20 @@ class Fouine:
         lsdir = self._ls(base_dir)
         if lsdir == -1:
             return []
-        subdirs = [d for d in lsdir if self._get_file(d).is_directory()]
+        lsdir.remove(b'.')
+        lsdir.remove(b'..')
+        subdirs = []
+        for d in lsdir:
+            try:
+                if self._get_file(f"{base_dir}{d.decode()}").is_directory():
+                    subdirs.append(d.decode())
+            except:
+                print(f"{Fore.LIGHTRED_EX} File {base_dir}{d.decode()} is an invalid API argument to FS_Info_open {Style.RESET_ALL}")
+        #subdirs = [d.decode() for d in lsdir if self._get_file(f"{base_dir}{d.decode()}").is_directory()]
         for subdir in subdirs:
             rest_path = "*".join(parts[1:])
             new_path = base_dir + subdir + rest_path
-            print(new_path)
+            print(f"{new_path} - BASE {base_dir}  SUB {subdir}   REST {rest_path}")
             results += self.expand_path(new_path)
         return results
 
@@ -531,12 +543,12 @@ class Fouine:
         try:
             file = self._get_file(filesystemID=filesystemID, filename=ewf_path)
         except Exception as e:
-            print(f"{e}  -  Can't access requested file on EWF image!")
+            print(f"{ewf_path}  -  Can't access requested file on EWF image!")
             return -1
         try:
             self._write_data(file.raw_data, host_path)
         except Exception as e:
-            print(f"{e}  -  We were not able to export data to host!")
+            print(f"{host_path} already exists.  -  We were not able to export data to host!")
             return -2
         return 0
 
@@ -605,24 +617,3 @@ class Fouine:
         return file
 
 
-"""
-  Il faut réaliser un outil en Python pour extraire les fichiers intéressants pour le forensic, d'une image disque au format EWF, celle utilisée en cours par exemple.
-
-  Vous devez extraire au minimum :
-
-  - les fichiers du registre système et les ruches utilisateur,
-  - Les navigateurs Internet Edge, Internet Explorer, Firefox et Chrome,
-  - les journaux Windows Security et System au minimum,
-  - et la MFT
-
-  La liste des fichiers à extraire devra être au format yaml, notamment pour indiquer les outils / commandes à utiliser par la suite (B.2).
-  Il ne s'agit pas d'être exhaustif, mais de prendre en compte les données sources étudiées en cours.
-  Il est conseillé d'utiliser des expressions régulières, mais seuls les fichiers prévus doivent être extraits.
-
-  Il est également conseillé d'utiliser, en back end, les commandes The Sleuth Kit suivantes: mmls, fls et icat
-
-  On restreindra l'outil aux fichiers à extraire venant dune image Windows 7 à Windows 11.
-
-  L'outil devra fonctionner sous Windows ou Linux, avec Python 3.
-
-"""

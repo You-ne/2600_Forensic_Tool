@@ -2,7 +2,7 @@
 import argparse
 import logging
 from datetime import datetime
-from prompt_toolkit import prompt
+from colorama import Fore, Style
 
 from fouine.core import ( _helper
                          , core
@@ -28,7 +28,11 @@ def main():
         parser.run()
         # Logging setting
         logger = logs.set_logs(parser.args)
-        fouine = core.Fouine(parser.args.input, logger)
+        try:
+            fouine = core.Fouine(parser.args.input, logger)
+        except Exception as e:
+            print(f"{e} {Fore.LIGHTRED_EX}\nYour input file disk must not be correct please verify!{Style.RESET_ALL}")
+            return
         # Retrieve target artifacts list
         targets = parsing.find_scope(parser.args, logger)
         #_helper.dir_create(targets)
@@ -50,6 +54,7 @@ def main():
         if fs_number > len(fouine.filesystems):
             logger.warning(f"Wrong fs number {fs_number}")
             return
+        logger.debug(targets)
         fouine.write_from_parser(targets)
 
     except (KeyboardInterrupt, EOFError):

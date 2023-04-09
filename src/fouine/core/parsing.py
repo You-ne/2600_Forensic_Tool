@@ -66,6 +66,7 @@ class Parser:
         self.parser.add_argument(
             "-v",
             "--verbose",
+            default=False,
             help="Use this option to activate verbose output on stdout.\n",
         )
         self.parser.add_argument(
@@ -108,25 +109,27 @@ def extract_yaml(configfile_path: str, outdir: str, logger) -> list[Target]:
         logger.warning(f"No configfile retrieved after yaml.load on {configfile_path}. Check that it is a correct yaml file !")
         return []
 
-    for tmp in configfile["Targets"]:
-        target = Target()
-        i = 0
-        for element, key in {"Path": 'path', "FileMask": 'file_mask',
-                         "Name": "name", "Category": 'category',
-                         "Recursive": 'recursive', "Comment": 'comment'}.items():
-            try:
-                if element == "Recursive":
-                    logger.debug(f"{tmp[element]}  {element}")
-                    logger.debug(target)
-                    if tmp[element] == False:
-                            setattr(target, 'filemask', ".*")
-                setattr(target, key, tmp[element])
+    try:
+        for tmp in configfile["Targets"]:
+            target = Target()
+            for element, key in {"Path": 'path', "FileMask": 'file_mask',
+                             "Name": "name", "Category": 'category',
+                             "Recursive": 'recursive', "Comment": 'comment'}.items():
+                try:
+                    if element == "Recursive":
+                        logger.debug(f"{tmp[element]}  {element}")
+                        logger.debug(target)
+                        if tmp[element] == False:
+                                setattr(target, 'filemask', ".*")
+                    setattr(target, key, tmp[element])
                 
-            except:
-                pass
-                #logger.debug(f"Have'not find arg {element} in tkape!")
-        target.export_path = outdir
-        rules.append(target)
+                except:
+                    pass
+                    #logger.debug(f"Have'not find arg {element} in tkape!")
+            target.export_path = outdir
+            rules.append(target)
+    except: 
+        logger.warning("That .yaml file was not a proper configuration file. Refer to documentation for more information.")
     return rules
 
 
@@ -203,7 +206,10 @@ def find_scope(args, logger) -> list:
             continue
 
     if not targets:
-        print("Loading default configS")
-        targets = DEFAULT_CONFIG
+        print("NO TARGETS")
+        logger.warning("Loading default configS")
+        def_conf = DEFAULT_CONFIG(args.output)
+        targets = def_conf.Targets
     
+    print(f"TARGETS {targets}")
     return targets
