@@ -25,7 +25,7 @@ class ColorFormatter(logging.Formatter):
         return f"{color}[{levelname}] {Fore.LIGHTCYAN_EX}{message}{Style.RESET_ALL}"
 
 
-def set_logs(args) -> logging.Logger:
+def set_logs(args, stdout_logs: Optional[bool]=True) -> (logging.Logger | None):
     """Sets the `logging` module with correct values from cli arguments.
 
     Receives the arguments from the `fouine.core.parsing.ParseArgs`
@@ -61,7 +61,9 @@ def set_logs(args) -> logging.Logger:
     logger = logging.getLogger()
     color_handler = logging.StreamHandler()
     color_handler.setFormatter(ColorFormatter())
-    logger.addHandler(color_handler)
+    
+    if stdout_logs == True:
+        logger.addHandler(color_handler)
     return logger
 
 

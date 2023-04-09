@@ -7,16 +7,16 @@ class DEFAULT_CONFIG:
     
     It includes the following rules:
 
-       219-257 Chrome
-       258-259 ChromeExtensions
-       260     ChromeFileSystem
-       261     Edge
-       262-283 EdgeChromium
-       284-318 Firefox
-       319-331 InternetExplorer
-       484-485 MFT
-       613-653 RegistryHivesSystem
-       654-662 RegistryHivesUser 
+       219-257 Chrome\n
+       258-259 ChromeExtensions\n
+       260     ChromeFileSystem\n
+       261     Edge\n
+       262-283 EdgeChromium\n
+       284-318 Firefox\n
+       319-331 InternetExplorer\n
+       484-485 MFT\n
+       613-653 RegistryHivesSystem\n
+       654-662 RegistryHivesUser\n
     
     Attributes:
        output(str): Local dir where data extracted from targets will be saved. Corresponds to --output.
