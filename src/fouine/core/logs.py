@@ -62,7 +62,7 @@ def set_logs(args, stdout_logs: Optional[bool]=True) -> (logging.Logger | None):
     color_handler = logging.StreamHandler()
     color_handler.setFormatter(ColorFormatter())
     
-    if stdout_logs == True:
+    if args.verbose == True:
         logger.addHandler(color_handler)
     return logger
 

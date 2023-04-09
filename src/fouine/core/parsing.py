@@ -8,6 +8,7 @@ except ImportError:
     from yaml import Loader, Dumper
 
 from fouine.core._helper import Target
+from fouine.core._defcfg import DEFAULT_CONFIG
 
 
 class Parser:
@@ -61,9 +62,7 @@ class Parser:
         self.parser.add_argument(
             "-v",
             "--verbose",
-            action="count",
-            default=0,
-            help="Use this option to set verbose level, e.g -vvv -> lvl3.\n",
+            help="Use this option to activate verbose output on stdout.\n",
         )
         self.parser.add_argument(
             "-l",
@@ -185,8 +184,10 @@ def find_scope(args, logger) -> list:
             )
             continue
 
+
+
     if not targets:
-        # targets = DEFAULT_TARGETS
-        pass
+        print("Loading default configS")
+        targets = DEFAULT_CONFIG
     
     return targets

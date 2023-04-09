@@ -24,23 +24,32 @@ def main():
         ## INITIALIZATION
         # Parsing
         
-
         parser = parsing.Parser()
         parser.run()
-        logger = logs.set_logs(parser.args)
-        logger.info("[X] Parsing arguments...")
         # Logging setting
-        logger.info(parser.args)
+        logger = logs.set_logs(parser.args)
         fouine = core.Fouine(parser.args.input, logger)
-        logger.info("Lancement de la Fouine...")
         # Retrieve target artifacts list
         targets = parsing.find_scope(parser.args, logger)
-        # Create the directory tree needed to hold extracted data
         #_helper.dir_create(targets)
-        ## HERE PASS THE TARGETS (TUPLE LIST) TO CORE.CORE
         fs_number = len(fouine.filesystems)
         logger.info(f"DETECTED {fs_number} filesystems")
-        if 
+        if fs_number != 1:
+            logger.warning(f"More than 1 filesystem detected, please choose one:")
+            logger.info(f"PARTITION TABLE : \n")
+            print(fouine.partition_table)
+            logger.info("FILESYSTEMS: ")
+            [print(fs) for fs in fouine.filesystems]
+            fs_number = int(input("Please enter a filesystem number:  "))
+        if type(fs_number) != int:
+            logger.warning(f"Wrong fs number {fs_number}")
+            return
+        if fs_number < 0:
+            logger.warning(f"Wrong fs number {fs_number}")
+            return
+        if fs_number > len(fouine.filesystems):
+            logger.warning(f"Wrong fs number {fs_number}")
+            return
         fouine.write_from_parser(targets)
 
     except (KeyboardInterrupt, EOFError):
