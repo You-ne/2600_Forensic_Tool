@@ -1,5 +1,5 @@
-from datetime import datetime
 import logging
+from datetime import datetime
 from functools import wraps
 from typing import Optional
 
@@ -25,7 +25,7 @@ class ColorFormatter(logging.Formatter):
         return f"{color}[{levelname}] {Fore.LIGHTCYAN_EX}{message}{Style.RESET_ALL}"
 
 
-def set_logs(args, stdout_logs: Optional[bool]=True) -> (logging.Logger | None):
+def set_logs(args, stdout_logs: Optional[bool] = True) -> logging.Logger | None:
     """Sets the `logging` module with correct values from cli arguments.
 
     Receives the arguments from the `fouine.core.parsing.ParseArgs`
@@ -61,7 +61,7 @@ def set_logs(args, stdout_logs: Optional[bool]=True) -> (logging.Logger | None):
     logger = logging.getLogger()
     color_handler = logging.StreamHandler()
     color_handler.setFormatter(ColorFormatter())
-    
+
     if args.verbose == True:
         logger.addHandler(color_handler)
     return logger

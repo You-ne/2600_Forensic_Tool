@@ -1,9 +1,9 @@
-from enum import Enum
-import re
 import os
-import pytsk3
-
+import re
+from enum import Enum
 from typing import Optional
+
+import pytsk3
 from colorama import Fore, Style
 
 SUPPORTED_FS = [
@@ -25,11 +25,18 @@ SUPPORTED_FS = [
 ]
 DEFAULT_USER = [b"All Users", b"Default", b"Default User", b"desktop.ini", b"Public"]
 
+
 class Target:
-    def __init__(self, name: Optional[str] = None, category: Optional[str] = None, 
-                path: Optional[str] = None, file_mask: Optional[str] = None, 
-                recursive: Optional[bool] = None, export_path: Optional[str] = None,
-                comment: Optional[str] = None):
+    def __init__(
+        self,
+        name: Optional[str] = None,
+        category: Optional[str] = None,
+        path: Optional[str] = None,
+        file_mask: Optional[str] = None,
+        recursive: Optional[bool] = None,
+        export_path: Optional[str] = None,
+        comment: Optional[str] = None,
+    ):
         self.name = name
         self.category = category
         self.path = path
@@ -37,7 +44,7 @@ class Target:
         self.file_mask = file_mask
         self.recursive = recursive
         self.comment = comment
-    
+
     def __repr__(self):
         attrs = []
         for attr in self.__dict__:
@@ -69,6 +76,7 @@ class Target:
                 elif attr == "recursive":
                     attrs.append(Fore.RED + str(None) + Style.RESET_ALL)
         return f"Target({', '.join(attrs)})"
+
 
 class FS_TYPE_ENUM(Enum):
     DTECT = pytsk3.TSK_FS_TYPE_DETECT  # 0x00000000,
@@ -126,7 +134,7 @@ class HKEYArtefacts(Enum):
             else:
                 return self._path_template.replace(b"<username>", username)
 
-    
+
 class WindowsNews(Enum):
     WINDOWS_APPLICATION_LOG = {
         "Windows 7": "/Windows/System32/Winevt/Logs/Application.evtx",
@@ -206,15 +214,15 @@ class WindowsBrowser(Enum):
 
 
 def expand_path(path) -> list:
-    if '*' not in path:
+    if "*" not in path:
         return [path]
     else:
-        parts = path.split('*')
+        parts = path.split("*")
         base_dir = parts[0]
         subdirs = [d for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d))]
         results = []
         for subdir in subdirs:
-            rest_path = '*'.join(parts[1:])
+            rest_path = "*".join(parts[1:])
             sub_path = os.path.join(base_dir, subdir, rest_path)
             results += expand_path(sub_path)
         return results
@@ -237,7 +245,7 @@ def dir_create(targets: list[Target]) -> None:
             print(f"{target.export_path} {target.path}")
             paths = expand_path(target.path)
             for suffix in paths:
-                path = target.export_path+suffix
+                path = target.export_path + suffix
                 path = path.rpartition("/")[:1]
                 path = str(path[0])
 
@@ -246,5 +254,3 @@ def dir_create(targets: list[Target]) -> None:
                     continue
                 else:
                     os.makedirs(path, mode)
-
-

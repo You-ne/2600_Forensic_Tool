@@ -2,13 +2,9 @@
 import argparse
 import logging
 from datetime import datetime
-from colorama import Fore, Style
 
-from fouine.core import ( _helper
-                         , core
-                         ,logs
-                         , parsing
-)
+from colorama import Fore, Style
+from fouine.core import _helper, core, logs, parsing
 
 
 ######################################
@@ -19,11 +15,11 @@ def main():
     This is the main.
     It takes care of calling `fouine.parsing.parser()` method, that will continue the execution.
     """
-    
+
     try:
         ## INITIALIZATION
         # Parsing
-        
+
         parser = parsing.Parser()
         parser.run()
         # Logging setting
@@ -31,11 +27,13 @@ def main():
         try:
             fouine = core.Fouine(parser.args.input, logger)
         except Exception as e:
-            print(f"{e} {Fore.LIGHTRED_EX}\nYour input file disk must not be correct please verify!{Style.RESET_ALL}")
+            print(
+                f"{e} {Fore.LIGHTRED_EX}\nYour input file disk must not be correct please verify!{Style.RESET_ALL}"
+            )
             return
         # Retrieve target artifacts list
         targets = parsing.find_scope(parser.args, logger)
-        #_helper.dir_create(targets)
+        # _helper.dir_create(targets)
         fs_number = len(fouine.filesystems)
         logger.info(f"DETECTED {fs_number} filesystems")
         if fs_number != 1:

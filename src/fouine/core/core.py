@@ -1,33 +1,36 @@
+import logging
 import os
 import re
-import logging
-from typing import Optional, Union
 import time
+from typing import Optional, Union
+
 import pyewf
 import pytsk3
+from colorama import Fore, Style
+
 from ._helper import (
     DEFAULT_USER,
     FILE_TYPE_ENUM,
     FS_TYPE_ENUM,
     SUPPORTED_FS,
     HKEYArtefacts,
+    Target,
     WindowsBrowser,
     WindowsNews,
-    Target,
 )
-from colorama import Fore, Style
 
 
 class File:
     """
-        Class to handle pytsk3.File basically adding is_directory nad .raw_data
-    """    
+    Class to handle pytsk3.File basically adding is_directory nad .raw_data
+    """
+
     def __init__(self, file: pytsk3.File) -> None:
         """Create  a File object
 
         Args:
             file (pytsk3.File): A python tsk3 file
-        """ 
+        """
         self.file = file
         self.raw_data = self.file.read_random(0, self.file.info.meta.size)
 
@@ -36,7 +39,7 @@ class File:
 
         Returns:
             Bool: True or False
-        """       
+        """
         try:
             self.file.as_directory()
             return True
@@ -46,13 +49,13 @@ class File:
 
 class HKEY:
     """
-        Class type to handle HKEY
-    """    
+    Class type to handle HKEY
+    """
+
     def __init__(
         self, name: Union[str, bytes], path: Union[str, bytes], file: Optional[File]
-       ) -> None:
-        """Create HKEY object
-        """ 
+    ) -> None:
+        """Create HKEY object"""
         self.name = name
         self.path = path
         self.file = file if file else None
@@ -354,7 +357,7 @@ class Fouine:
         except:
             self.logger.warning(f"PATH NOT FOUND {path} on  fs {filesystemID}")
             return -1
-    
+
     def _write_data(self, data: Union[bytes, bytearray, str], path):
         """
         The _export function is used to export data from the database.
@@ -380,10 +383,10 @@ class Fouine:
     def _find_file_in_dir(self, path: str, rexpr: str, filesystemID: int = 0):
         self.logger.debug(f"REGEX: {rexpr}")
         if rexpr is None:
-          rexpr = ".*" 
+            rexpr = ".*"
         else:
-          rexpr = rexpr.replace('.', '\.')
-          rexpr = rexpr.replace('*', '.*')
+            rexpr = rexpr.replace(".", "\.")
+            rexpr = rexpr.replace("*", ".*")
         self.logger.debug(f"REGEX UPDATE: {rexpr}")
         rexpr = re.compile(rexpr)
         dir = self._ls(path)
@@ -442,16 +445,18 @@ class Fouine:
         lsdir = self._ls(base_dir)
         if lsdir == -1:
             return []
-        lsdir.remove(b'.')
-        lsdir.remove(b'..')
+        lsdir.remove(b".")
+        lsdir.remove(b"..")
         subdirs = []
         for d in lsdir:
             try:
                 if self._get_file(f"{base_dir}{d.decode()}").is_directory():
                     subdirs.append(d.decode())
             except:
-                print(f"{Fore.LIGHTRED_EX} File {base_dir}{d.decode()} is an invalid API argument to FS_Info_open {Style.RESET_ALL}")
-        #subdirs = [d.decode() for d in lsdir if self._get_file(f"{base_dir}{d.decode()}").is_directory()]
+                print(
+                    f"{Fore.LIGHTRED_EX} File {base_dir}{d.decode()} is an invalid API argument to FS_Info_open {Style.RESET_ALL}"
+                )
+        # subdirs = [d.decode() for d in lsdir if self._get_file(f"{base_dir}{d.decode()}").is_directory()]
         for subdir in subdirs:
             rest_path = "*".join(parts[1:])
             new_path = base_dir + subdir + rest_path
@@ -504,10 +509,12 @@ class Fouine:
                     else:
                         self.logger.debug(f"FILEMASK: {target}\n\n{path}")
                         flist = self._find_file_in_dir(path, target.file_mask, filesystemID)
-                        self.logger.debug(f"return {flist} path {path}, name {target.name}, fsid {filesystemID}")
+                        self.logger.debug(
+                            f"return {flist} path {path}, name {target.name}, fsid {filesystemID}"
+                        )
                     if flist == -1:
-                      self.logger.debug(f"FLIST: {flist}")
-                      continue
+                        self.logger.debug(f"FLIST: {flist}")
+                        continue
                     self.logger.debug(f"Found {len(flist)} corresponding files: {flist} at {path}")
 
                     for f in flist:
@@ -515,17 +522,19 @@ class Fouine:
                         ewf_files.append(ewf_path)
                 i = 0
                 for ewf_f in ewf_files:
-                    export_path = target.export_path +'/'+ ewf_f
-                    export_dir, s, tmp = export_path.rpartition('/')
+                    export_path = target.export_path + "/" + ewf_f
+                    export_dir, s, tmp = export_path.rpartition("/")
                     self.logger.debug(f"Attempting to write {ewf_f} at\n\n {export_path}\n")
                     if not os.path.exists(export_dir):
-                        try :
-                          os.makedirs(export_dir,  0o740)
+                        try:
+                            os.makedirs(export_dir, 0o740)
                         except Exception as e:
-                            self.logger.error(f"{e}  -  WE WERE NOT ABLE TO CREATE DIR {export_dir}")
+                            self.logger.error(
+                                f"{e}  -  WE WERE NOT ABLE TO CREATE DIR {export_dir}"
+                            )
                     self.logger.debug(f"f: {ewf_f},\n ep: {export_path},\n fsid {filesystemID}")
-                    #print(f"{Fore.LIGHTRED_EX}{i} f: {ewf_f}\n{export_path}{Style.RESET_ALL}")
-                    #time.sleep(0.5)
+                    # print(f"{Fore.LIGHTRED_EX}{i} f: {ewf_f}\n{export_path}{Style.RESET_ALL}")
+                    # time.sleep(0.5)
 
                     self.write_file(ewf_f, export_path, filesystemID)
 
@@ -551,7 +560,6 @@ class Fouine:
             print(f"{host_path} already exists.  -  We were not able to export data to host!")
             return -2
         return 0
-
 
     def get_hkeys_files(
         self,
@@ -611,5 +619,3 @@ class Fouine:
                 return file
             raise ValueError("Export path was not specified dumbass")
         return file
-
-

@@ -1,3 +1,4 @@
+from core import *
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
 from prompt_toolkit.history import FileHistory
@@ -5,8 +6,6 @@ from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.patch_stdout import patch_stdout
 from prompt_toolkit.shortcuts import prompt as sub_prompt
 from prompt_toolkit.styles import Style as kitStyle
-
-from core import *
 
 
 class FouineConsole:
