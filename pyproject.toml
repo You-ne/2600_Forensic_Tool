@@ -29,10 +29,10 @@ argparse = "^1.4.0"
 pytsk3 = "^20230125"
 regrippy = "^2.0.0"
 ipython = "^8.12.0"
-
-###
 pyyaml = "^6.0"
 prompt-toolkit = "^3.0.38"
+
+###
 
 [tool.poetry.group.dev]
 optional = true
@@ -52,7 +52,7 @@ flake8-quotes = "^3.3.2"
 optional = true
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.4.2"
-mkdocstrings = "^0.20.0"
+mkdocstrings = "*"
 
 
 ##########################
@@ -141,7 +141,7 @@ warn_unreachable=				true
 pretty =						true
 
 ###############################################################################
-                                  # MYPY #
+                                  # PYTEST #
 ###############################################################################
 [tool.pytest.ini_options]
 testpaths = ["tests"]

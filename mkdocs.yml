@@ -1,0 +1,29 @@
+site_name: Fouine
+site_description: "The documentation of Fouine forensic tool."
+
+repo_name: Github
+repo_url: https://github.com/You-ne/2600_Forensic_Tool
+
+docs_dir: docs/
+theme:
+  name: "material"
+
+plugins:
+  - search
+  - mkdocstrings
+
+nav:
+  - Home: index.md
+  - API Documentation:
+      - src/:
+        - src/fouine/core/core.py
+        - src/fouine/core/console.py
+        - src/fouine/core/__init__.py
+        - src/fouine/core/_helper.py
+        - src/fouine/core/logs.py
+        - src/fouine/core/_defcfg.py
+        - src/fouine/core/parsing.py
+        - src/fouine/__init__.py
+        - src/fouine/fouine.py
+        - src/fouine/modules/__init__.py
+
