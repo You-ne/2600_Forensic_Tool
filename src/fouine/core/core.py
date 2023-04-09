@@ -1,5 +1,6 @@
 import os
 import re
+import logging
 from typing import Optional, Union
 
 import pyewf
@@ -12,23 +13,37 @@ from ._helper import (
     HKEYArtefacts,
     WindowsBrowser,
     WindowsNews,
+    Target,
 )
 from colorama import Fore, Style
 
 
-class File():
-    def __init__(self, file:pytsk3.File) -> None:
+class File:
+    def __init__(self, file: pytsk3.File) -> None:
         self.file = file
         self.raw_data = self.file.read_random(0, self.file.info.meta.size)
 
-class HKEY():
-    def __init__(self, name: Union[str,bytes], path: Union[str,bytes], file: Optional[File]) -> None:
+    def is_directory(self):
+        try:
+            self.file.as_direcory()
+            return True
+        except OSError:
+            return False
+
+
+class HKEY:
+    def __init__(
+        self, name: Union[str, bytes], path: Union[str, bytes], file: Optional[File]
+    ) -> None:
         self.name = name
         self.path = path
         self.file = file if file else None
-    
-    def __repr__(self,):
+
+    def __repr__(
+        self,
+    ):
         return f"{Fore.LIGHTGREEN_EX}{self.name} {Fore.YELLOW}{self.path}\n"
+
 
 class EwfImg(pytsk3.Img_Info):
     def _get_partitions(self):
@@ -273,7 +288,7 @@ class Fouine:
     def __init__(
         self,
         filename: str,
-        logger
+        logger: Optional[logging.Logger] = None,
     ) -> None:
         """
         The __init__ function is called when the class is instantiated.
@@ -289,7 +304,7 @@ class Fouine:
         :doc-author: Telio
         """
         self.raw = filename
-        self.logger =logger
+        self.logger = logger
         self.filenames = pyewf.glob(self.raw) if self.raw else None
         self.handle = pyewf.handle()
         self.handle.open(self.filenames)
@@ -303,12 +318,15 @@ class Fouine:
         except:
             pass
 
-    def _get_file(self, filename, filesystemID: int =0) -> File:
+    def _get_file(self, filename, filesystemID: int = 0) -> File:
         return self.filesystems[filesystemID].read_file(filename)
 
-    def _ls(self, path, filesystemID: int =0) -> list:
-        return self.filesystems[filesystemID].ls(path)
-  
+    def _ls(self, path, filesystemID: int = 0) -> list:
+        try:
+            return self.filesystems[filesystemID].ls(path)
+        except:
+            self.logger.warning(f"PATH NOT FOUND {path} on  fs {filesystemID}")
+            return -1
     def _write_data(self, data: Union[bytes, bytearray, str], path):
         """
         The _export function is used to export data from the database.
@@ -331,9 +349,15 @@ class Fouine:
         with open(path, "wb") as f:
             f.write(data)
 
-    def _find_file_in_dir(self, path: str, rexpr:str, filesystemID: int = 0):
+    def _find_file_in_dir(self, path: str, rexpr: str, filesystemID: int = 0):
+        self.logger.debug(f"REGEX: {rexpr}")
+        rexpr = rexpr.replace('.', '\.')
+        rexpr = rexpr.replace('*', '.*')
+        self.logger.debug(f"REGEX UPDATE: {rexpr}")
         rexpr = re.compile(rexpr)
         dir = self._ls(path)
+        if dir == -1:
+            return -1
         return [file for file in dir if rexpr.match(file.decode())]
 
     def _get_fs(self, part_idx=None) -> list:
@@ -360,19 +384,21 @@ class Fouine:
         if not self.system_users:
             self.list_users(filesystemID)
         for hkey in HKEYArtefacts:
-          try:
-              if hkey.name == 'HKEY_USERS_NT':
-                  for u in self.system_users:
-                      path = hkey.get_path(u)
-                      file = self._get_file(filesystemID=filesystemID, filename=path.decode('ascii'))
-                      HK = HKEY(hkey.name, path, file)
-              else:
-                path = hkey.get_path('')
-                file = self._get_file(filesystemID=filesystemID, filename=path.decode('ascii'))
-                HK = HKEY(hkey.name, path, file)
-          except:
-              continue
-          self.available_hkeys.append(HK)
+            try:
+                if hkey.name == "HKEY_USERS_NT":
+                    for u in self.system_users:
+                        path = hkey.get_path(u)
+                        file = self._get_file(
+                            filesystemID=filesystemID, filename=path.decode("ascii")
+                        )
+                        HK = HKEY(hkey.name, path, file)
+                else:
+                    path = hkey.get_path("")
+                    file = self._get_file(filesystemID=filesystemID, filename=path.decode("ascii"))
+                    HK = HKEY(hkey.name, path, file)
+            except:
+                continue
+            self.available_hkeys.append(HK)
         return self.available_hkeys
 
     def write_file(
@@ -393,53 +419,78 @@ class Fouine:
             return -2
         return 0
 
-    def _format_windows_path(self, path: str) :
-      paths = []
-      path = path.replace('\\', '/')
-      path = path.replace('//', '/')
-      path = path.replace('C:', '')
-      self.logger.debug(path)
-      if '%user%' in path:
-          for u in self.system_users:
-              self.logger.debug(f"user: {u}")
-              paths.append(path.replace('%user%', u.decode()))
-          self.logger.debug(f"FMTWINDWS RET: {paths}")
-          return paths
-      paths.append(path)
-      self.logger.debug(f"FMTWINDWS RET: {paths}")
-      return paths
-    
-    def _format_arg_list(self, arglist) -> list:
-        new_list = []
-        for couple in arglist:
-            prefix = couple[0]
-            path = couple[1]
-            tmp = self._format_windows_path(path)
-            for p in tmp:
-                new_list.append([prefix, p])
-        print(new_list)
-        return new_list
-              
-    def write_from_parser(self, arglist: list, filesystemID: int = 0) -> None:
-        fmtargs = self._format_arg_list(arglist)
-        self.logger.debug('Begin')
-        for couple in fmtargs:
-          ewf_file = couple[1]
-          ewf_dir, se, file = ewf_file.rpartition('/')
-          host_file = couple[0]+couple[1]
-          self.logger.debug
-          directory, s, name = host_file.rpartition('/')
-          #if not os.path.exists(directory): 
-          #    os.makedirs(directory, mode=0o740)
-          try:
-            if ('*' or'[') in file:
-                files = self._find_file_in_dir(path=ewf_dir, rexpr=file, filesystemID=filesystemID)
-                pass
-            self.write_file(
-              ewf_path=ewf_file, host_path=host_file,
-              filesystemID=filesystemid)
-          except:
-              self.logger.info(f"CANT ACCES {ewf_file} SORRY")
+    def expand_path(self, path: str) -> list:
+        if not "*" in path:
+            return [path]
+
+        parts = path.split("*")
+        base_dir = parts[0]
+        print(f"BD: {base_dir} - PARTS: {parts}")
+        lsdir = self._ls(base_dir)
+        if lsdir == -1:
+            return []
+        subdirs = [d for d in lsdir if self._get_file(d).is_directory()]
+        for subdir in subdirs:
+            rest_path = "*".join(parts[1:])
+            new_path = base_dir + subdir + rest_path
+            print(new_path)
+            results += self.expand_path(new_path)
+        return results
+
+    def _format_tkap_path(self, path: str):
+        paths = []
+        path = path.replace("\\", "/")
+        path = path.replace("//", "/")
+        path = path.replace("C:", "")
+        self.logger.debug(path)
+
+        if "%user%" in path:
+            for u in self.system_users:
+                self.logger.debug(f"user: {u}")
+                paths.append(path.replace("%user%", u.decode()))
+            self.logger.debug(f"FMTWINDWS RET: {paths}")
+            return paths
+        paths.append(path)
+
+        for path in paths:
+            paths.remove(path)
+            tmp = self.expand_path(path)
+            paths.extend(tmp)
+        self.logger.debug(f"FMTTKAP RET: {paths}")
+        return paths
+
+    def write_from_parser(self, arglist: list[Target], filesystemID: int = 0) -> None:
+        for scope in arglist:
+            for target in scope:
+                ewf_files = []
+                paths = self._format_tkap_path(target.path)
+                for path in paths:
+                    if target.recursive:
+                        self.logger.debug(f"RECURSE: {target}\n\n{path}")
+                        flist = self._find_file_in_dir(path, "*", filesystemID)
+                    else:
+                        self.logger.debug(f"FILEMASK: {target}\n\n{path}")
+                        flist = self._find_file_in_dir(path, target.file_mask, filesystemID)
+                        self.logger.debug(f"return {flist} path {path}, name {target.name}, fsid {filesystemID}")
+                    if flist == -1:
+                      self.logger.debug(f"FLIST: {flist}")
+                      continue
+                    self.logger.debug(f"Found {len(flist)} corresponding files: {flist} at {path}")
+
+                    for f in flist:
+                        ewf_path = path + f.decode()
+                        ewf_files.append(ewf_path)
+                for ewf_f in ewf_files:
+                    export_path = target.export_path + ewf_f
+                    export_dir, s, tmp = export_path.rpartition('/')
+                    self.logger.debug(f"Attempting to write {ewf_f} at\n\n {export_path}\n")
+                    if not os.path.exists(export_dir):
+                        try :
+                          os.makedirs(export_dir,  0o740)
+                        except Exception as e:
+                            self.logger.error(f"{e}  -  WE WERE NOT ABLE TO CREATE DIR {export_dir}")
+                    self.logger.debug(f"f: {ewf_f},\n ep: {export_path},\n fsid {filesystemID}")
+                    self.write_file(ewf_f, export_path, filesystemID)
 
     def list_users(self, filesystemID: int = 0) -> list[bytes]:
         user_ls = self.filesystems[filesystemID].ls("/Users")[2:]
@@ -449,19 +500,19 @@ class Fouine:
     def get_hkeys_files(
         self,
         filesystemID: int = 0,
-        filter: Optional[list[str]] = False, # filter should be a list of hkey.name values
+        filter: Optional[list[str]] = False,  # filter should be a list of hkey.name values
         export: Optional[bool] = False,
         export_path: Optional[str] = False,
     ) -> list[dict]:
         if not self.available_hkeys:
-          self._enumerate_available_hkeys(filesystemID)
-        print('start')
+            self._enumerate_available_hkeys(filesystemID)
+        print("start")
         for hkey in self.available_hkeys:
-            print('c')
+            print("c")
             if filter:
                 if hkey.name in filter:
                     continue
-            print(f"-{export_path}- t: {type(export_path)} {export_path is True}")    
+            print(f"-{export_path}- t: {type(export_path)} {export_path is True}")
             if export:
                 print(f"test export {export_path}")
                 try:

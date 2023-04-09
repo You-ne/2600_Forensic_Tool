@@ -10,7 +10,7 @@ class ColorFormatter(logging.Formatter):
     def format(self, record):
         levelname = record.levelname
         if levelname == "DEBUG":
-            color = Fore.BLUE
+            color = Fore.LIGHTMAGENTA_EX
         elif levelname == "INFO":
             color = Fore.GREEN
         elif levelname == "WARNING":
@@ -22,7 +22,7 @@ class ColorFormatter(logging.Formatter):
         else:
             color = ""
         message = super().format(record)
-        return f"{color}{message}{Style.RESET_ALL}"
+        return f"{color}[{levelname}] {Fore.LIGHTCYAN_EX}{message}{Style.RESET_ALL}"
 
 
 def set_logs(args) -> logging.Logger:
@@ -56,7 +56,7 @@ def set_logs(args) -> logging.Logger:
     logging.basicConfig(
         level=loglevel,
         format="%(levelname)s %(message)s",
-        handlers=[logging.FileHandler(logname), logging.StreamHandler()],
+        handlers=[logging.FileHandler(logname)],
     )
     logger = logging.getLogger()
     color_handler = logging.StreamHandler()

@@ -3,6 +3,9 @@ import re
 import os
 import pytsk3
 
+from typing import Optional
+from colorama import Fore, Style
+
 SUPPORTED_FS = [
     b"TFS",
     b"NTFS",
@@ -22,6 +25,50 @@ SUPPORTED_FS = [
 ]
 DEFAULT_USER = [b"All Users", b"Default", b"Default User", b"desktop.ini", b"Public"]
 
+class Target:
+    def __init__(self, name: Optional[str] = None, category: Optional[str] = None, 
+                path: Optional[str] = None, file_mask: Optional[str] = None, 
+                recursive: Optional[bool] = None, export_path: Optional[str] = None,
+                comment: Optional[str] = None):
+        self.name = name
+        self.category = category
+        self.path = path
+        self.export_path = export_path
+        self.file_mask = file_mask
+        self.recursive = recursive
+        self.comment = comment
+    
+    def __repr__(self):
+        attrs = []
+        for attr in self.__dict__:
+            value = getattr(self, attr)
+            if value is not None:
+                if attr == "name":
+                    attrs.append(Fore.BLUE + str(value) + Style.RESET_ALL)
+                elif attr == "category":
+                    attrs.append(Fore.GREEN + str(value) + Style.RESET_ALL)
+                elif attr == "path":
+                    attrs.append(Fore.YELLOW + str(value) + Style.RESET_ALL)
+                elif attr == "export_path":
+                    attrs.append(Fore.MAGENTA + str(value) + Style.RESET_ALL)
+                elif attr == "file_mask":
+                    attrs.append(Fore.CYAN + str(value) + Style.RESET_ALL)
+                elif attr == "recursive":
+                    attrs.append(Fore.RED + str(value) + Style.RESET_ALL)
+            else:
+                if attr == "name":
+                    attrs.append(Fore.BLUE + str(None) + Style.RESET_ALL)
+                elif attr == "category":
+                    attrs.append(Fore.GREEN + str(None) + Style.RESET_ALL)
+                elif attr == "path":
+                    attrs.append(Fore.YELLOW + str(None) + Style.RESET_ALL)
+                elif attr == "export_path":
+                    attrs.append(Fore.MAGENTA + str(None) + Style.RESET_ALL)
+                elif attr == "file_mask":
+                    attrs.append(Fore.CYAN + str(None) + Style.RESET_ALL)
+                elif attr == "recursive":
+                    attrs.append(Fore.RED + str(None) + Style.RESET_ALL)
+        return f"Target({', '.join(attrs)})"
 
 class FS_TYPE_ENUM(Enum):
     DTECT = pytsk3.TSK_FS_TYPE_DETECT  # 0x00000000,
@@ -157,7 +204,23 @@ class WindowsBrowser(Enum):
         "Windows 10/11": "/Users/%(user)/AppData/Local/Microsoft/Edge/User Data/Default/Cookies",
     }
 
-def dir_create(targets) -> None:
+
+def expand_path(path) -> list:
+    if '*' not in path:
+        return [path]
+    else:
+        parts = path.split('*')
+        base_dir = parts[0]
+        subdirs = [d for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d))]
+        results = []
+        for subdir in subdirs:
+            rest_path = '*'.join(parts[1:])
+            sub_path = os.path.join(base_dir, subdir, rest_path)
+            results += expand_path(sub_path)
+        return results
+
+
+def dir_create(targets: list[Target]) -> None:
     """Creates the directory structure to store the retrieved artifacts.
 
     This function receives the target artifacts list. It will iterate on it, and will create a directory
@@ -167,19 +230,21 @@ def dir_create(targets) -> None:
     Args:
         targets(list): List of target artifacts.  Each element is itself a list, with the desired output directry as 1st element; the 2nd being the path of the desired artifact.
     """
-
-    # Sets permissions to chmod 740
     mode = 0o740
 
-    # Retrieves the correct directory path to create
-    for target in targets:
-        path = target[0]+target[1]
-        path = path.rpartition("/")[:1]
-        path = str(path[0])
+    for scope in targets:
+        for target in scope:
+            print(f"{target.export_path} {target.path}")
+            paths = expand_path(target.path)
+            for suffix in paths:
+                path = target.export_path+suffix
+                path = path.rpartition("/")[:1]
+                path = str(path[0])
 
-        # Creates the directories if not already existing
-        if os.path.exists(path):
-            continue
-        else:
-            os.makedirs(path, mode)
+                # Creates the directories if not already existing
+                if os.path.exists(path):
+                    continue
+                else:
+                    os.makedirs(path, mode)
+
 

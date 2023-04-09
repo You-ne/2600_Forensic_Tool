@@ -1,10 +1,13 @@
 import argparse
 import os
 import yaml
+
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
+
+from fouine.core._helper import Target
 
 
 class Parser:
@@ -75,96 +78,105 @@ class Parser:
         self.args = self.parser.parse_args()
 
 
-
-
-
-
-def extract_yaml(configfile_path, outdir)->list:
+def extract_yaml(configfile_path, outdir, logger) -> list[Target]:
     """Receives the path of a .tkape, .yaml or .yml config file, and extract the contained rules.
     Args:
         configfile_path(str): The path of a .tkape, .yaml or .yml config file.
         outdir(str): The path of save directory (--output option).
     """
-    
+
+    print(f"extract received {outdir}")
+
     # Init rules list
     rules = list()
 
     # Load yaml file
-    stream = open(configfile_path, 'r')
+    if not os.path.isfile(configfile_path):
+        logger.warning(f"{configfile_path} is not a valid file!")
+        return []
+    stream = open(configfile_path, "r")
     configfile = yaml.load(stream, Loader=Loader)
-    
     # Retrieve extraction rules from Targets field
-    for target in configfile["Targets"]:
-        path = target["Path"]
-        if target["FileMask"]:
-            path = path+target["FileMask"]
-        if target["Recursive"]:
-            rules.append([outdir, path[2:].replace("\\", "/"), "Recursive"])
-        else:
-            rules.append([outdir, path[2:].replace("\\", "/"), "\0"])
+    if configfile is None:
+        logger.warning(f"{configfile} is None after yaml.load")
+        return []
 
-    return(rules)
+    for tmp in configfile["Targets"]:
+        target = Target()
+        for element, key in {"Path": 'path', "FileMask": 'file_mask',
+                         "Name": "name", "Category": 'category',
+                         "Recursive": 'recursive', "Comment": 'comment'}.items():
+            try:
+                if element == "Recursive":
+                    if not tmp[element] and not tmp["Filemask"]:
+                        setattr(target, 'filemask', ".*")
+                setattr(target, key, tmp[element])
+            except:
+                pass
+                #logger.debug(f"Have'not find arg {element} in tkape!")
+        target.export_path = outdir
+        rules.append(target)
+    return rules
 
 
+def find_scope(args, logger) -> list:
+    """From the config file, lists the artifacts that needs recovery, and the needed methods."""
 
-def find_scope(config, logger)->list:
-    """From the config file, lists the artifacts that needs recovery, and the needed methods.
-    """
-    
     # Establish a list of path to look for config files, based on --config option
-    if "," in config:
-        cfg_paths = config.split(",")
+    if "," in args.config:
+        cfg_paths = args.config.split(",")
     else:
-        cfg_paths = config
-       
-    
-    print(f"Taking targets from {cfg_paths}")
+        cfg_paths = args.config
+
+    logger.debug(f"Taking targets from {cfg_paths}")
 
     # Retrieves targets list from each config file.
     # The result is a list of 3 elements list. They hold the desired save path as 1st element, the artifact path as 2nd,
     # and wether it is a file or a directory that should be explored recursively as a 3rd element.
     targets = list()
+    outdir = args.output
     for path in cfg_paths:
-        
+        last_path_elem = path.rpartition("/")[-1]
+        extension = last_path_elem.rpartition(".")[-1]
+
+        if extension is last_path_elem:
+            
+            if os.path.isdir(path):
+                dir_files = os.listdir(path)
+                for file in dir_files:
+                    # Extension check
+                    if file.rpartition("/")[:1].rpartition(".")[:1] in ("yml, " "yaml", "tkape"):
+                        rules = extract_yaml(file, outdir)
+                        if rules != []:
+                            targets.append(rules)
+                    # Wrong extension warning
+                    else:
+                        logger.warning(
+                            f"[!] Wrong extension for the config file {file}... It should be a yaml file with .yaml, .yml or .tkape file.\n    File Skipped. "
+                        )
+                        continue
+            else:
+                logger.warning(
+                    f"[!] Non-existant config directory {dir}... It should be a yaml file with .yaml, .yml or .tkape file.\n    File Skipped. "
+                )
+                continue
+            
+
         # Rules are extracted if path points to a config file with proper extension.
-        if extension:=path.rpartition("/")[:1].rpartition(".")[:1] in ("yml, ""yaml", "tkape"):
-            rules = extract_yaml(path)
-            targets.append(rules)
+        if extension in ("yml", "yaml", "tkape"):
+            rules = extract_yaml(path, outdir, logger)
+            if rules != []:
+                targets.append(rules)
 
-        # If path points to a directory, file are checked for proper extensio nthen rules are extracted.
-        elif extension == "":
-            dir_files = os.listdir(path)
-            for file in dir_files:
-                # Extension check
-                if file.rpartition("/")[:1].rpartition(".")[:1] in ("yml, ""yaml", "tkape"):
-                    rules = extract_yaml(file)
-                    targets.append(rules)
-                # Wrong extension warning
-                else:
-                    logger.warning(f"[!] Wrong extension for the config file {file}... It should be a yaml file with .yaml, .yml or .tkape file.\n    File Skipped. ")
-                    continue
-
-            """
-            stream = open(configfile, 'r')
-            tmp_conf = yaml.load(stream, Loader=Loader)
-
-            for entry in tmp_conf["Targets"]:
-                path = entry["Path"]
-                if entry["FileMask"]:
-                    path = path+entry["FileMask"]
-                if entry["Recursive"]:
-                    targets.append([args.output, path[2:].replace("\\", "/"), "Recursive"])
-                else:
-                    targets.append([args.output, path[2:].replace("\\", "/"), "\0"])
-            """
-        
         # Skip file and alert if wrong file extension
         else:
-            logger.warning(f"[!] Wrong extension for the config file {path}... It should be a yaml file with .yaml, .yml or .tkape file.\n    File Skipped. ")
+            logger.warning(
+                f"[!] Wrong extension for the config file {path}...\n    Directory Skipped. "
+            )
             continue
-    
+
     if not targets:
-        #targets = DEFAULT_TARGETS
+        # targets = DEFAULT_TARGETS
         pass
     
-    return(targets)
+    return targets
