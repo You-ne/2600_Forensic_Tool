@@ -42,6 +42,7 @@ poetry.lock
 
 # Sphinx documentation
 docs/_build/
+/site
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -79,5 +80,7 @@ _FOUINE_EXPORTS
 ./src./_FOUINE_EXPORTS/*
 ./src/fouine/_FOUINE_EXPORTS/*
 ./src/fouine/core/_FOUINE_EXPORTS/*
+
+# Fouined Input/output
 Fouined/
 disks/
