@@ -49,7 +49,7 @@ class Parser:
         self.parser.add_argument(
             "-o",
             "--output",
-            default="./Fouined",
+            default="./Fouined/",
             help="The dir you want to save your results in.\n",
         )
         self.parser.add_argument(

@@ -2,7 +2,7 @@ import os
 import re
 import logging
 from typing import Optional, Union
-
+import time
 import pyewf
 import pytsk3
 from ._helper import (
@@ -216,7 +216,6 @@ class FilesystemHelper(pytsk3.FS_Info):
 
         :doc-author: Telio
         """
-        print(file_path)
         return File(self.open(file_path))
 
 
@@ -435,13 +434,11 @@ class Fouine:
 
     def expand_path(self, path: str) -> list:
         results = []
-        print(f"PATH EXPANSION: {path}")
         if not "*" in path:
             return [path]
 
         parts = path.split("*")
         base_dir = parts[0]
-        print(f"BD: {base_dir} - PARTS: {parts}")
         lsdir = self._ls(base_dir)
         if lsdir == -1:
             return []
@@ -458,7 +455,6 @@ class Fouine:
         for subdir in subdirs:
             rest_path = "*".join(parts[1:])
             new_path = base_dir + subdir + rest_path
-            print(f"{new_path} - BASE {base_dir}  SUB {subdir}   REST {rest_path}")
             results += self.expand_path(new_path)
         return results
 
@@ -517,6 +513,7 @@ class Fouine:
                     for f in flist:
                         ewf_path = path + f.decode()
                         ewf_files.append(ewf_path)
+                i = 0
                 for ewf_f in ewf_files:
                     export_path = target.export_path + ewf_f
                     export_dir, s, tmp = export_path.rpartition('/')
@@ -527,6 +524,8 @@ class Fouine:
                         except Exception as e:
                             self.logger.error(f"{e}  -  WE WERE NOT ABLE TO CREATE DIR {export_dir}")
                     self.logger.debug(f"f: {ewf_f},\n ep: {export_path},\n fsid {filesystemID}")
+                    print(f"{Fore.LIGHTRED_EX}{i} f: {ewf_f}\n{export_path}{Style.RESET_ALL}")
+                    time.sleep(0.5)
                     self.write_file(ewf_f, export_path, filesystemID)
 
     def list_users(self, filesystemID: int = 0) -> list[bytes]:
@@ -562,15 +561,11 @@ class Fouine:
     ) -> list[dict]:
         if not self.available_hkeys:
             self._enumerate_available_hkeys(filesystemID)
-        print("start")
         for hkey in self.available_hkeys:
-            print("c")
             if filter:
                 if hkey.name in filter:
                     continue
-            print(f"-{export_path}- t: {type(export_path)} {export_path is True}")
             if export:
-                print(f"test export {export_path}")
                 try:
                     if export_path == "" or ".":
                         if not os.path.exists("./_FOUINE_EXPORTS"):
