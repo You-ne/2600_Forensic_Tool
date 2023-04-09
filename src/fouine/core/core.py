@@ -432,7 +432,7 @@ class Fouine:
             self.available_hkeys.append(HK)
         return self.available_hkeys
 
-    def expand_path(self, path: str) -> list:
+    def _expand_path(self, path: str) -> list:
         results = []
         if not "*" in path:
             return [path]
@@ -515,7 +515,7 @@ class Fouine:
                         ewf_files.append(ewf_path)
                 i = 0
                 for ewf_f in ewf_files:
-                    export_path = target.export_path + ewf_f
+                    export_path = target.export_path +'/'+ ewf_f
                     export_dir, s, tmp = export_path.rpartition('/')
                     self.logger.debug(f"Attempting to write {ewf_f} at\n\n {export_path}\n")
                     if not os.path.exists(export_dir):
@@ -524,8 +524,9 @@ class Fouine:
                         except Exception as e:
                             self.logger.error(f"{e}  -  WE WERE NOT ABLE TO CREATE DIR {export_dir}")
                     self.logger.debug(f"f: {ewf_f},\n ep: {export_path},\n fsid {filesystemID}")
-                    print(f"{Fore.LIGHTRED_EX}{i} f: {ewf_f}\n{export_path}{Style.RESET_ALL}")
-                    time.sleep(0.5)
+                    #print(f"{Fore.LIGHTRED_EX}{i} f: {ewf_f}\n{export_path}{Style.RESET_ALL}")
+                    #time.sleep(0.5)
+
                     self.write_file(ewf_f, export_path, filesystemID)
 
     def list_users(self, filesystemID: int = 0) -> list[bytes]:

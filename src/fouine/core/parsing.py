@@ -32,7 +32,7 @@ class Parser:
         In this method each possible argument for `fouine` is declared using the `argparse.ArgumentParser.add_argument()` method.
 
         Args:
-            self(Parser): self
+            self (fouine.core.parsing.Parser): self
         """
 
         self.parser = argparse.ArgumentParser(
@@ -141,16 +141,16 @@ def find_scope(args, logger) -> list:
     If only one path was given, it will be stored in a list nonetheless.
     
     The function will then separate the rightmost part of the given paths, 
-    using \/ as a delimiter, one path by one.
+    using / as a delimiter, one path by one.
     
     Then, it can act on it in three ways:
-        - If it is a directory, it will explore it (non-recursively) and look for config files using the same process.
-        - If it is a yml, yaml or tkape file, it will extract the rules contained in it.
-        - If it is a file with the wrong extension, or if the path doesn't exits, it will skip it and continue.
+        - If it is a directory, it will explore it (non-recursively) and look for config files using the same process.\n
+        - If it is a yml, yaml or tkape file, it will extract the rules contained in it.\n
+        - If it is a file with the wrong extension, or if the path doesn't exits, it will skip it and continue.\n”
 
     Args:
-        args(Namespace): The arguments given to fouine by the user.
-        logger(logging.Logger): The logger initialized in fouine.logs.set_logs().
+        args (Namespace): The arguments given to fouine by the user.
+        logger (logging.Logger): The logger initialized in fouine.logs.set_logs().
     """
 
     # Establish a list of path to look for config files, based on --config option
@@ -206,10 +206,8 @@ def find_scope(args, logger) -> list:
             continue
 
     if not targets:
-        print("NO TARGETS")
         logger.warning("Loading default configS")
         def_conf = DEFAULT_CONFIG(args.output)
         targets = def_conf.Targets
     
-    print(f"TARGETS {targets}")
     return targets
