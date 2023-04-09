@@ -30,18 +30,18 @@ class DEFAULT_CONFIG:
             Target(
                 name="$MFT",
                 category="MFT",
-                path="$MFT",
-                file_mask="",
-                recursive=True,
+                path="",
+                file_mask="$MFT",
+                recursive=False,
                 export_path=self.output,
             ),
             # rule 485
             Target(
                 name="$MFTMirr",
                 category="MFT",
-                path="$MFTMirr",
-                file_mask="",
-                recursive=True,
+                path="",
+                file_mask="$MFTMirr",
+                recursive=False,
                 export_path="recusive",
             ),
             ##### REGISTRIES #####
@@ -52,7 +52,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SAM.LOG*",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 614
@@ -61,7 +61,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SAM.LOG*",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 615 ### LOGS
@@ -70,7 +70,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SECURITY.LOG*",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 616 ### LOGS
@@ -79,7 +79,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SECURITY.LOG*",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 617
@@ -88,7 +88,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SOFTWARE.LOG*",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 618
@@ -97,7 +97,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SOFTWARE.LOG*",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 619 ### LOGS
@@ -106,7 +106,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SYSTEM.LOG*",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 620 ### LOGS
@@ -114,8 +114,8 @@ class DEFAULT_CONFIG:
                 name="",
                 category="",
                 path="Windows.old\Windows\System32\config\\",
-                file_mask="\SYSTEM.LOG*",
-                recursive=True,
+                file_mask="SYSTEM.LOG*",
+                recursive=False,
                 export_path="output",
             ),
             # 621
@@ -124,7 +124,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SAM",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 622
@@ -133,7 +133,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SAM",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 623
@@ -142,7 +142,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SECURITY",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 624
@@ -151,7 +151,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SECURITY",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 625
@@ -160,7 +160,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SOFTWARE",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 626
@@ -169,7 +169,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SOFTWARE",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 627
@@ -178,7 +178,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SYSTEM",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 628
@@ -187,7 +187,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SYSTEM",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 629
@@ -196,7 +196,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\RegBack\\",
                 file_mask="*.LOG",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 630
@@ -205,7 +205,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\RegBack\\",
                 file_mask="*.LOG",
-                recursive=True,
+                recursive=False,
                 export_path="output",
             ),
             # 631

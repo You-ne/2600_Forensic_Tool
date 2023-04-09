@@ -77,8 +77,13 @@ class Parser:
         self.args = self.parser.parse_args()
 
 
-def extract_yaml(configfile_path, outdir, logger) -> list[Target]:
+def extract_yaml(configfile_path: str, outdir: str, logger) -> list[Target]:
     """Receives the path of a .tkape, .yaml or .yml config file, and extract the contained rules.
+
+    It will first check that the path points to an exitsing file, then try to load it using yaml.load().
+    
+
+
     Args:
         configfile_path(str): The path of a .tkape, .yaml or .yml config file.
         outdir(str): The path of save directory (--output option).
@@ -90,16 +95,14 @@ def extract_yaml(configfile_path, outdir, logger) -> list[Target]:
 
     # Load yaml file
     if not os.path.isfile(configfile_path):
-        logger.warning(f"{configfile_path} is not a valid file!")
+        logger.warning(f"{configfile_path} config file doesn't exist!\n File is skipped!")
         return []
     stream = open(configfile_path, "r")
     configfile = yaml.load(stream, Loader=Loader)
     # Retrieve extraction rules from Targets field
     if configfile is None:
-        logger.warning(f"{configfile} is None after yaml.load on {configfile_path}")
+        logger.warning(f"No configfile retrieved after yaml.load on {configfile_path}. Check that it is a correct yaml file !")
         return []
-    else:
-        print(f"Succesfully loaded {configfile_path}")
 
     for tmp in configfile["Targets"]:
         target = Target()
@@ -128,7 +131,24 @@ def extract_yaml(configfile_path, outdir, logger) -> list[Target]:
 
 
 def find_scope(args, logger) -> list:
-    """From the config file, lists the artifacts that needs recovery, and the needed methods."""
+    """From the --config argument, will list all configuration files and call extract_yaml on them to retrieve extraction rules.
+
+    First, it will figure out if it received multiple paths from --config.
+    In this case, it will put them in a list.
+    If only one path was given, it will be stored in a list nonetheless.
+    
+    The function will then separate the rightmost part of the given paths, 
+    using \/ as a delimiter, one path by one.
+    
+    Then, it can act on it in three ways:
+        - If it is a directory, it will explore it (non-recursively) and look for config files using the same process.
+        - If it is a yml, yaml or tkape file, it will extract the rules contained in it.
+        - If it is a file with the wrong extension, or if the path doesn't exits, it will skip it and continue.
+
+    Args:
+        args(Namespace): The arguments given to fouine by the user.
+        logger(logging.Logger): The logger initialized in fouine.logs.set_logs().
+    """
 
     # Establish a list of path to look for config files, based on --config option
     if "," in args.config:
@@ -140,8 +160,6 @@ def find_scope(args, logger) -> list:
     logger.debug(f"Taking targets from {cfg_paths}")
 
     # Retrieves targets list from each config file.
-    # The result is a list of 3 elements list. They hold the desired save path as 1st element, the artifact path as 2nd,
-    # and wether it is a file or a directory that should be explored recursively as a 3rd element.
     targets = list()
     outdir = args.output
     for path in cfg_paths:
@@ -183,8 +201,6 @@ def find_scope(args, logger) -> list:
                 f"[!] Wrong extension for the config file {path}...\n    Directory Skipped. "
             )
             continue
-
-
 
     if not targets:
         print("Loading default configS")

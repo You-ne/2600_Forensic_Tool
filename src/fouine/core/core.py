@@ -19,11 +19,24 @@ from colorama import Fore, Style
 
 
 class File:
+    """
+        Class to handle pytsk3.File basically adding is_directory nad .raw_data
+    """    
     def __init__(self, file: pytsk3.File) -> None:
+        """Create  a File object
+
+        Args:
+            file (pytsk3.File): A python tsk3 file
+        """ 
         self.file = file
         self.raw_data = self.file.read_random(0, self.file.info.meta.size)
 
-    def is_directory(self):
+    def is_directory(self) -> bool:
+        """Is this file a directory
+
+        Returns:
+            Bool: True or False
+        """       
         try:
             self.file.as_direcory()
             return True
@@ -32,9 +45,14 @@ class File:
 
 
 class HKEY:
+    """
+        Class type to handle HKEY
+    """    
     def __init__(
         self, name: Union[str, bytes], path: Union[str, bytes], file: Optional[File]
-    ) -> None:
+       ) -> None:
+        """Create HKEY object
+        """ 
         self.name = name
         self.path = path
         self.file = file if file else None
@@ -327,6 +345,7 @@ class Fouine:
         except:
             self.logger.warning(f"PATH NOT FOUND {path} on  fs {filesystemID}")
             return -1
+    
     def _write_data(self, data: Union[bytes, bytearray, str], path):
         """
         The _export function is used to export data from the database.
@@ -468,6 +487,18 @@ class Fouine:
                 ewf_files = []
                 paths = self._format_tkap_path(target.path)
                 for path in paths:
+                    if path is None:
+                        if target.file_mask:
+                            if target.recursive:
+                                flist = self._find_file_in_dir(path, "*", filesystemID)
+                                if flist == -1:
+                                    self.logger.debug(f"FLIST: {flist}")
+                                    continue
+                                for f in flist:
+                                    ewf_path = path + f.decode()
+                                    ewf_files.append(ewf_path)
+                            ewf_files.append(target.file_mask)
+                            continue
                     if target.recursive:
                         self.logger.debug(f"RECURSE: {target}\n\n{path}")
                         flist = self._find_file_in_dir(path, "*", filesystemID)
