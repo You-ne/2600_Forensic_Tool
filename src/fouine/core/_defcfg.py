@@ -32,7 +32,7 @@ class DEFAULT_CONFIG:
                 category="MFT",
                 path="$MFT",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path=self.output,
             ),
             # rule 485
@@ -41,7 +41,7 @@ class DEFAULT_CONFIG:
                 category="MFT",
                 path="$MFTMirr",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="recusive",
             ),
             ##### REGISTRIES #####
@@ -52,7 +52,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SAM.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 614
@@ -61,7 +61,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SAM.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 615 ### LOGS
@@ -70,7 +70,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SECURITY.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 616 ### LOGS
@@ -79,7 +79,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SECURITY.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 617
@@ -88,7 +88,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SOFTWARE.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 618
@@ -97,7 +97,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SOFTWARE.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 619 ### LOGS
@@ -106,7 +106,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SYSTEM.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 620 ### LOGS
@@ -115,7 +115,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="\SYSTEM.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 621
@@ -124,7 +124,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SAM",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 622
@@ -133,7 +133,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SAM",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 623
@@ -142,7 +142,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SECURITY",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 624
@@ -151,7 +151,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SECURITY",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 625
@@ -160,7 +160,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SOFTWARE",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 626
@@ -169,7 +169,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SOFTWARE",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 627
@@ -178,7 +178,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="SYSTEM",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 628
@@ -187,7 +187,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="SYSTEM",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 629
@@ -196,7 +196,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\RegBack\\",
                 file_mask="*.LOG",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 630
@@ -205,7 +205,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\RegBack\\",
                 file_mask="*.LOG",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 631
@@ -214,7 +214,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\RegBack\\",
                 file_mask="SAM",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 632
@@ -223,7 +223,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\RegBack\\",
                 file_mask="SAM",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 633
@@ -232,7 +232,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\RegBack\\",
                 file_mask="SECURITY",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 634
@@ -241,7 +241,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\RegBack\\",
                 file_mask="SECURITY",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 635
@@ -250,7 +250,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\RegBack\\",
                 file_mask="SOFTWARE",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 636
@@ -259,7 +259,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Registry,Windows.old\Windows\System32\config\RegBack\\",
                 file_mask="SOFTWARE",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 637
@@ -268,7 +268,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\RegBack\\",
                 file_mask="SYSTEM",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 638
@@ -277,7 +277,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path=",Windows.old\Windows\System32\config\RegBack\\",
                 file_mask="SYSTEM",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 639
@@ -286,7 +286,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\RegBack\\",
                 file_mask="SYSTEM1",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 640
@@ -295,7 +295,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\RegBack\\",
                 file_mask="SYSTEM1",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 641
@@ -304,7 +304,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\systemprofile\\",
                 file_mask="NTUSER.DAT",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 642
@@ -313,7 +313,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\systemprofile\\",
                 file_mask="NTUSER.DAT",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 643
@@ -322,7 +322,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Registry,Windows\System32\config\systemprofile\\",
                 file_mask="NTUSER.DAT.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 644
@@ -331,7 +331,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\systemprofile\\",
                 file_mask="NTUSER.DAT.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 645
@@ -340,7 +340,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\ServiceProfiles\LocalService\\",
                 file_mask="NTUSER.DAT",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 646
@@ -349,7 +349,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\ServiceProfiles\LocalService\\",
                 file_mask="NTUSER.DAT",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 647
@@ -358,7 +358,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\ServiceProfiles\LocalService\\",
                 file_mask="NTUSER.DAT.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 648
@@ -367,7 +367,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\ServiceProfiles\LocalService\\",
                 file_mask="NTUSER.DAT.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 649
@@ -376,7 +376,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\ServiceProfiles\\NetworkService\\",
                 file_mask="NTUSER.DAT",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 650
@@ -385,7 +385,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\ServiceProfiles\\NetworkService\\",
                 file_mask="NTUSER.DAT",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 651
@@ -394,7 +394,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\ServiceProfiles\\NetworkService\\",
                 file_mask="NTUSER.DAT.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 652
@@ -403,7 +403,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\ServiceProfiles\\NetworkService\\",
                 file_mask="NTUSER.DAT.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 653
@@ -412,7 +412,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="System Volume Information\_restore*\RP*\snapshot\\",
                 file_mask="_REGISTRY_*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             ### RegistryHiveUser: Rules 654 - 662
@@ -422,7 +422,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\\",
                 file_mask="NTUSER.DAT",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 655
@@ -431,7 +431,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\\",
                 file_mask="NTUSER.DAT",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 656
@@ -440,7 +440,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\\",
                 file_mask="NTUSER.DAT.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 657
@@ -449,7 +449,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="DEFAULT",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 658
@@ -458,7 +458,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="DEFAULT",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 659
@@ -467,7 +467,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows\System32\config\\",
                 file_mask="\DEFAULT.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 660
@@ -476,7 +476,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Windows.old\Windows\System32\config\\",
                 file_mask="DEFAULT.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 661
@@ -485,7 +485,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\AppData\Local\Microsoft\Windows\\",
                 file_mask="UsrClass.dat",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 662
@@ -494,7 +494,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\AppData\Local\Microsoft\Windows\\",
                 file_mask="UsrClass.dat.LOG*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             ### BROWSERS DATA
@@ -506,7 +506,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Bookmarks*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 220
@@ -515,7 +515,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Cookies*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 221
@@ -524,7 +524,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Current Session",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 222
@@ -533,7 +533,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Current Tabs",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 223
@@ -542,7 +542,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Favicons*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 224
@@ -551,7 +551,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="History*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 225
@@ -560,7 +560,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Last Session",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 226
@@ -569,7 +569,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Last Tabs",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 227
@@ -578,7 +578,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Login Data",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 228
@@ -587,7 +587,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Preferences",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 229
@@ -596,7 +596,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Shortcuts*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 230
@@ -605,7 +605,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Top Sites*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 231
@@ -614,7 +614,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Visited Links",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 232
@@ -623,7 +623,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\\",
                 file_mask="Web Data*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 233
@@ -632,7 +632,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*",
                 file_mask="Bookmarks*",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 234
@@ -641,7 +641,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\**10\Cookies*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 235
@@ -650,7 +650,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Current Session",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 236
@@ -659,7 +659,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Current Tabs",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 237
@@ -668,7 +668,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\DownloadMetadata",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 238
@@ -677,7 +677,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Extension Cookies",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 239
@@ -686,7 +686,7 @@ class DEFAULT_CONFIG:
                 category="",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Favicons*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 240
@@ -695,7 +695,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\History*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 241
@@ -704,7 +704,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Last Session",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 242
@@ -713,7 +713,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Last Tabs",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 243
@@ -722,7 +722,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Sessions\*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 244
@@ -731,7 +731,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Login Data",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 245
@@ -740,7 +740,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Media History*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 246
@@ -749,7 +749,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\\Network Action Predictor",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 247
@@ -758,7 +758,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\\Network Persistent State",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 248
@@ -767,7 +767,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Preferences",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 249
@@ -776,7 +776,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\QuotaManager",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 250
@@ -785,7 +785,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Reporting and NEL",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 251
@@ -794,7 +794,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Shortcuts*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 252
@@ -803,7 +803,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Top Sites*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 253
@@ -812,7 +812,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Trust Tokens*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 254
@@ -821,7 +821,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Sync Data\SyncData.sqlite3",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 255
@@ -830,7 +830,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Visited Links",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 256
@@ -839,7 +839,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Web Data*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 257
@@ -848,7 +848,7 @@ class DEFAULT_CONFIG:
                 category="FileSystem",
                 path="Users\*\AppData\Roaming\Microsoft\Protect\*\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # Extensions: Rules 258-259
@@ -858,7 +858,7 @@ class DEFAULT_CONFIG:
                 category="Communication",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\Extensions\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 259
@@ -867,7 +867,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Local Settings\Application Data\Google\Chrome\\User Data\*\Extensions\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # FileSystem: Rule 260
@@ -877,7 +877,7 @@ class DEFAULT_CONFIG:
                 category="Communication",
                 path="Users\*\AppData\Local\Google\Chrome\\User Data\*\File System\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             ## EDGE
@@ -888,7 +888,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # Edge Chromium: Rules 262-283
@@ -898,7 +898,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Bookmarks*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 263
@@ -907,7 +907,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Collections\collectionsSQLite",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 264
@@ -916,7 +916,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Cookies*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 265
@@ -925,7 +925,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Current Session",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 266
@@ -934,7 +934,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Current Tabs",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 267
@@ -943,7 +943,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Favicons*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 268
@@ -952,7 +952,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\History*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 269
@@ -961,7 +961,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Last Session",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 270
@@ -970,7 +970,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Last Tabs",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 271
@@ -979,7 +979,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Sessions\*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 272
@@ -988,7 +988,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Login Data",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 273
@@ -997,7 +997,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Media History*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 274
@@ -1006,7 +1006,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\\Network Action Predictor",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 275
@@ -1015,7 +1015,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Preferences",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 276
@@ -1024,7 +1024,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Shortcuts*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 277
@@ -1033,7 +1033,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Top Sites*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 278
@@ -1042,7 +1042,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Sync Data\SyncData.sqlite3",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 279
@@ -1051,7 +1051,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Bookmarks*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 280
@@ -1060,7 +1060,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Visited Links",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 281
@@ -1069,7 +1069,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\*\Web Data*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 282
@@ -1078,7 +1078,7 @@ class DEFAULT_CONFIG:
                 category="FileSystem",
                 path="Users\*\AppData\Roaming\Microsoft\Protect\*\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 283
@@ -1087,7 +1087,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Edge\\User Data\Snapshots\*\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             ## FIREFOX: Rules 284-318
@@ -1097,7 +1097,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\addons.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 285
@@ -1106,7 +1106,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\weave\bookmarks.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 286
@@ -1115,7 +1115,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\bookmarkbackups\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 287
@@ -1124,7 +1124,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\cookies.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 288
@@ -1133,7 +1133,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\firefox_cookies.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 289
@@ -1142,7 +1142,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\downloads.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 290
@@ -1151,7 +1151,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\extensions.json",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 291
@@ -1160,7 +1160,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\favicons.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 292
@@ -1169,7 +1169,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\formhistory.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 293
@@ -1178,7 +1178,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\permissions.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 294
@@ -1187,7 +1187,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\places.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 295
@@ -1196,7 +1196,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\protections.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 296
@@ -1205,7 +1205,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\search.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 297
@@ -1214,7 +1214,7 @@ class DEFAULT_CONFIG:
                 cateory="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\signons.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 298
@@ -1223,7 +1223,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\storage-sync.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 299
@@ -1232,7 +1232,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\webappstore.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 300
@@ -1241,7 +1241,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\key*.db",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 301
@@ -1250,7 +1250,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\signon*.*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 302
@@ -1259,7 +1259,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\logins.json",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 303
@@ -1268,7 +1268,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\prefs.js",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 304
@@ -1277,7 +1277,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\sessionstore*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 305
@@ -1286,7 +1286,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Mozilla\Firefox\Profiles\*\sessionstore-backups\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 306
@@ -1295,7 +1295,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\places.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 307
@@ -1304,7 +1304,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\downloads.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 308
@@ -1313,7 +1313,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\formhistory.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 309
@@ -1322,7 +1322,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\cookies.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 310
@@ -1331,7 +1331,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\signons.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 311
@@ -1340,7 +1340,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\webappstore.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 312
@@ -1349,7 +1349,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\favicons.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 313
@@ -1358,7 +1358,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\addons.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 314
@@ -1367,7 +1367,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\search.sqlite*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 315
@@ -1376,7 +1376,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\key*.db",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 316
@@ -1385,7 +1385,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\signon*.*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 317
@@ -1394,7 +1394,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\logins.json",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 318
@@ -1403,7 +1403,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Mozilla\Firefox\Profiles\*\sessionstore*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # EXPLORER: Rules 319-331
@@ -1413,7 +1413,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Local Settings\History\History.IE5\index.dat",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 320
@@ -1422,7 +1422,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Local Settings\History\History.IE5\*\index.dat",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 321
@@ -1431,7 +1431,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Cookies\index.dat",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 322
@@ -1440,7 +1440,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Microsoft\Internet Explorer\\UserData\index.dat",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 323
@@ -1449,7 +1449,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Documents and Settings\*\Application Data\Microsoft\Office\Recent\index.dat",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 324
@@ -1458,7 +1458,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Microsoft\Office\Recent\index.dat",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 325
@@ -1467,7 +1467,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Internet Explorer\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 326
@@ -1476,7 +1476,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Roaming\Microsoft\Internet Explorer\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 327
@@ -1485,7 +1485,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="",
                 file_mask="Users\*\AppData\Local\Microsoft\Windows\History\**10",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 328
@@ -1494,7 +1494,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Windows\Cookies\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 329
@@ -1503,7 +1503,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Windows\IEDownloadHistory\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 330
@@ -1512,7 +1512,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Windows\WebCache\*",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
             # 331
@@ -1521,7 +1521,7 @@ class DEFAULT_CONFIG:
                 category="Communications",
                 path="Users\*\AppData\Local\Microsoft\Windows\INetCookies\**10",
                 file_mask="",
-                recursive="Recursive",
+                recursive=True,
                 export_path="output",
             ),
         ]

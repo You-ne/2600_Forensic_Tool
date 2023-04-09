@@ -351,8 +351,11 @@ class Fouine:
 
     def _find_file_in_dir(self, path: str, rexpr: str, filesystemID: int = 0):
         self.logger.debug(f"REGEX: {rexpr}")
-        rexpr = rexpr.replace('.', '\.')
-        rexpr = rexpr.replace('*', '.*')
+        if rexpr is None:
+          rexpr = ".*" 
+        else:
+          rexpr = rexpr.replace('.', '\.')
+          rexpr = rexpr.replace('*', '.*')
         self.logger.debug(f"REGEX UPDATE: {rexpr}")
         rexpr = re.compile(rexpr)
         dir = self._ls(path)

@@ -1,7 +1,7 @@
 import argparse
 import os
 import yaml
-
+import time
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
@@ -85,7 +85,6 @@ def extract_yaml(configfile_path, outdir, logger) -> list[Target]:
         outdir(str): The path of save directory (--output option).
     """
 
-    print(f"extract received {outdir}")
 
     # Init rules list
     rules = list()
@@ -98,19 +97,29 @@ def extract_yaml(configfile_path, outdir, logger) -> list[Target]:
     configfile = yaml.load(stream, Loader=Loader)
     # Retrieve extraction rules from Targets field
     if configfile is None:
-        logger.warning(f"{configfile} is None after yaml.load")
+        logger.warning(f"{configfile} is None after yaml.load on {configfile_path}")
         return []
+    else:
+        print(f"Succesfully loaded {configfile_path}")
 
     for tmp in configfile["Targets"]:
         target = Target()
+        i = 0
         for element, key in {"Path": 'path', "FileMask": 'file_mask',
                          "Name": "name", "Category": 'category',
                          "Recursive": 'recursive', "Comment": 'comment'}.items():
             try:
                 if element == "Recursive":
-                    if not tmp[element] and not tmp["Filemask"]:
-                        setattr(target, 'filemask', ".*")
+                    logger.debug(f"{tmp[element]}  {element}")
+                    logger.debug(target)
+                    if tmp[element] == False:
+                            
+                            logger.debug(f"I: {i}")
+                            i += 1
+                            time.sleep(3)
+                            setattr(target, 'filemask', ".*")
                 setattr(target, key, tmp[element])
+                
             except:
                 pass
                 #logger.debug(f"Have'not find arg {element} in tkape!")
@@ -126,7 +135,8 @@ def find_scope(args, logger) -> list:
     if "," in args.config:
         cfg_paths = args.config.split(",")
     else:
-        cfg_paths = args.config
+        cfg_paths = list()
+        cfg_paths.append(args.config)
 
     logger.debug(f"Taking targets from {cfg_paths}")
 
@@ -140,13 +150,13 @@ def find_scope(args, logger) -> list:
         extension = last_path_elem.rpartition(".")[-1]
 
         if extension is last_path_elem:
-            
             if os.path.isdir(path):
                 dir_files = os.listdir(path)
                 for file in dir_files:
                     # Extension check
-                    if file.rpartition("/")[:1].rpartition(".")[:1] in ("yml, " "yaml", "tkape"):
-                        rules = extract_yaml(file, outdir)
+                    filename = file.rpartition("/")[-1]
+                    if filename.rpartition(".")[-1] in ("yml", "yaml", "tkape"):
+                        rules = extract_yaml(path+"/"+file, outdir, logger)
                         if rules != []:
                             targets.append(rules)
                     # Wrong extension warning
@@ -157,13 +167,13 @@ def find_scope(args, logger) -> list:
                         continue
             else:
                 logger.warning(
-                    f"[!] Non-existant config directory {dir}... It should be a yaml file with .yaml, .yml or .tkape file.\n    File Skipped. "
+                    f"[!] Non-existant config directory {dir}...\n    Directory Skipped. "
                 )
                 continue
             
 
         # Rules are extracted if path points to a config file with proper extension.
-        if extension in ("yml", "yaml", "tkape"):
+        elif extension in ("yml", "yaml", "tkape"):
             rules = extract_yaml(path, outdir, logger)
             if rules != []:
                 targets.append(rules)
