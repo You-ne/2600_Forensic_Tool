@@ -80,11 +80,21 @@ Install __fouine__ with the following to have everything needed for contribution
 
 ### Committing
 
-/WILL SOON BE ACTIVATED\\
-
-
 When committing to the repo, the hooks configured by __pre-commit__ will be used on the codebase to check it's conformity.
 
 If these tools checks are failing, you won't be able to commit...
 
 So correct your style !
+
+---
+
+## Documentation
+
+After cloning the repo, and installing with:
+`poetry install --with docs`
+
+Run `mkdocs build` and `mkdocs serve`.
+
+You will have access to the documentation on [localhost](http://localhost:8000)
+It is much more extensive than this poor README ;)
+
